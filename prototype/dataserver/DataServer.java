@@ -66,7 +66,7 @@ public class DataServer implements IDataServer {
 
 	public void upload(String data,int size,String requester) throws RemoteException
 	{
-		System.out.println("Inside DataServer.java: upload");
+		System.out.println("Inside prototype.dataserver.DataServer: upload one");
 		char[] bits = new char[size];
 
 		for(int i = 0; i < size;i++)
@@ -133,6 +133,7 @@ public class DataServer implements IDataServer {
 		String config = new String("config/DataServer.cfg");
 		File configFile = new File(config);
 		FileInputStream fis;
+		System.out.println("Inside prototype.dataserver.DataServer: upload main");
 		try {
 			fis = new FileInputStream(configFile);
 			new AppConfig();

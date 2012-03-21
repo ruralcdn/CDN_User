@@ -62,7 +62,7 @@ public class Reassembler extends Thread{
 
 				if(packet.isMetaData())
 				{
-					System.out.println("Received a metaData Packet");
+					System.out.println("Inside NewStack.Reassembler: Received a metaData Packet");
 					String data = packet.getName();
 					long offset = packet.getSequenceNumber();
 					byte[] segment = packet.getData();
@@ -108,16 +108,19 @@ public class Reassembler extends Thread{
 							mpContent.put(data,conProp);
 							if(currentsegments == conProp.getTotalSegments())
 							{
-								System.out.println("In Reassembler.java, received file "+data+"! :D :D ");
+								System.out.println("In NewStack.Reassembler.java, received file "+data+"! :D :D ");
 								if(data.contains(".log")){
 									downLog = true ;
-									System.out.println("Download Log received");
+									System.out.println("Inside NewStack.Reassembler: Download Log received");
 								}	
 								if(data.contains(".jpg")){
-									System.out.println("ThumbNail received ");
+									System.out.println("Inside NewStack.Reassembler: ThumbNail received ");
 									String path = AppConfig.getProperty("User.DataLog.Directory.path");
 									File imgName = new File(path+data);
-									imgName.renameTo(new File("C:\\Documents and Settings\\CDN\\workspace\\PSDITDEMO\\WebContent\\DBServer\\"+data));
+									String Ipath = AppConfig.getProperty("imagepath");
+									System.err.println("Inside NewStack.Reassembler: ImagePath"+ Ipath);
+									imgName.renameTo(new File("C:\\Documents and Settings\\CDN\\workspace\\PSDITDEMO\\WebContent\\DBServer\\"+data));//amit
+									//imgName.renameTo(new File("C:\\Users\\Administrator\\workspace\\PubSubApi\\WebContent\\DBServer\\"+data));
 								}
 								if(fileDownloads != null)
 									fileDownloads.put(data);

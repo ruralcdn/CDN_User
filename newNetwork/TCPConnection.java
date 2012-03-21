@@ -107,7 +107,7 @@ public class TCPConnection implements Connection{
 
 		
 		
-		//System.out.println("Packet type: "+ordinal);
+		System.out.println("Inside newNetwork.TCPConnection: Packet type: "+ordinal);
 		//Packet.PacketType type = Packet.PacketType.values()[ordinal];
 		//read sequence number
 		read = 0;
@@ -134,7 +134,7 @@ public class TCPConnection implements Connection{
 		read += numRead;
 		}					
 		int ContentNameLength = Utils.byteArrayToInt(buffer, 0);
-	//	System.out.println("ContetnNameLen = "+ContentNameLength);
+		System.out.println("Inside newNetwork.TCPConnection: ContetnNameLen = "+ContentNameLength);
 		//read data's length
 		read = 0;
 		numRead = 0;
@@ -175,7 +175,7 @@ public class TCPConnection implements Connection{
 		}
 		byte[] data = buffer;
 		
-		//System.out.println("Read packet :) from socket stream");
+		System.out.println("Inside newNetwork.TCPConnection: Read packet :) from socket stream");
 		Packet.PacketType type = Packet.PacketType.values()[ordinal];
 		packet = new Packet(type,contentName,data,sequenceNumber,null,isMetaData);
 		return packet;
@@ -199,6 +199,7 @@ public class TCPConnection implements Connection{
 		System.out.println("calculated ContetnNameLen = "+Utils.byteArrayToInt(packetarray, 12));
 		System.out.println("calculated DataLen "+Utils.byteArrayToInt(packetarray, 16));
 		}*/
+		System.out.println("Inside newNetwork.TCPConnection: ");
 		OutputStream out = getOutputStream();
 		out.write(packet.getBytePacket());
 		out.flush();

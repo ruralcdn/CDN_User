@@ -15,7 +15,7 @@ public class RendezvousClient {
 	    Registry registry = LocateRegistry.getRegistry(host);
 	    IRendezvous stub = (IRendezvous) registry.lookup("rendezvous");
 	    List<String> l = stub.find("xyz.txt");
-	    System.out.println("response: "+l);
+	    System.out.println("Inside prototype.rendezvous.RendezvousClient: response: "+l);
 
 	} catch (Exception e) {
 	    System.err.println("Client exception: " + e.toString());

@@ -28,7 +28,7 @@ public class ApplicationStateManager {
 	{
 		Properties state = new Properties();
 		FileInputStream fis;
-		
+		System.out.println("Inside StateManagement.ApplicationStateManager:");
 		try {
 			fis = new FileInputStream(status);
 			state.load(fis);

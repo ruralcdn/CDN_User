@@ -38,6 +38,7 @@ public class DataDownloader extends Thread{
 	
 	public void run()
 	{
+		System.out.println("Inside NewStack.DataDownloader: level 1");
 		while(execute)
 		{
 			try
@@ -91,6 +92,7 @@ public class DataDownloader extends Thread{
 	
 	@SuppressWarnings("unused")
 	private void detectLink(){
+		System.out.println("Inside NewStack.DataDownloader: method detectLink");
 		try 
 		{
 			List<String> temp = new ArrayList<String>();

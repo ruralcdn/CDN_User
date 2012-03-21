@@ -54,7 +54,7 @@ public class CustodianSession implements ICustodianSession{
 		stateManager = sManager;
 		appStateManager = caManager;
 		networkStack = stack;
-		System.out.println("Session established userId: "+userId);
+		System.out.println("Inside prototype.custodian.CustodianSession: Session established userId: "+userId);
 	}
 
 	public boolean subscribe(String subject) throws RemoteException
@@ -96,7 +96,7 @@ public class CustodianSession implements ICustodianSession{
 	public boolean close_connection() throws RemoteException
 	{
 
-		System.out.println("Closing Connection");
+		System.out.println("Inside CustodianSession: Closing Connection");
 		sessionStub.close_connection();
 		networkStack.close();
 		return UnicastRemoteObject.unexportObject(this, true);
@@ -109,7 +109,7 @@ public class CustodianSession implements ICustodianSession{
 		List<String> reply = null;
 		try
 		{
-			System.out.println("New Process Request for Dynamic Content");
+			System.out.println("Inside CustodianSession: New Process Request for Dynamic Content");
 			//should hav information in hosts file for destination
 
 			Registry registry = LocateRegistry.getRegistry(AppConfig.getProperty("Custodian.Rendezvous.IP"));    
@@ -117,7 +117,7 @@ public class CustodianSession implements ICustodianSession{
 			IRendezvous stub = (IRendezvous) registry.lookup(rendezvousService);   //config
 			List<String> l = stub.find(dest+"$serviceInstance");
 			String serviceInstanceInfo = l.get(0);
-			System.out.println("response from rendezvous:    "+l);	
+			System.out.println("Inside CustodianSession: response from rendezvous:    "+l);	
 
 			String[] connectionInfo = serviceInstanceInfo.split(":");
 			String cacheAddress = connectionInfo[0];
@@ -174,7 +174,7 @@ public class CustodianSession implements ICustodianSession{
 
 		try {
 			destination = AppConfig.getProperty("Custodian.UploadCache");
-			System.out.println("New Data To be Uploaded");
+			System.out.println("Inside CustodianSession: New Data To be Uploaded");
 			//inform service instance about new upload
 			//should hav a hosts file to get info on the cache
 			String[] connectionInfo = destination.split(":");
@@ -202,7 +202,7 @@ public class CustodianSession implements ICustodianSession{
 		String contentName = null;
 		String serviceInstanceInfo = null;
 		try {
-			System.out.println("New Data To be Uploaded");
+			System.out.println("Inside CustodianSession: New Data To be Uploaded");
 			//inform service instance about new upload
 
 			Registry registry = LocateRegistry.getRegistry(AppConfig.getProperty("Custodian.Rendezvous.IP"));    
@@ -210,7 +210,7 @@ public class CustodianSession implements ICustodianSession{
 			IRendezvous stub = (IRendezvous) registry.lookup(rendezvousService);   //config
 			List<String> l = stub.find(dest+"$serviceInstance");
 			serviceInstanceInfo = l.get(0);
-			System.out.println("response from rendezvous:    "+l);	
+			System.out.println("Inside CustodianSession: response from rendezvous:    "+l);	
 
 
 			String[] connectionInfo = serviceInstanceInfo.split(":");
@@ -236,22 +236,22 @@ public class CustodianSession implements ICustodianSession{
 
 	public void upload(String data,int size) throws RemoteException
 	{
-		System.out.println("Inside CustodianSession.java: upload1111");
+		System.out.println("Inside CustodianSession: upload method for two arguments");
 		String destination = null;
 		try
 		{
 			destination = AppConfig.getProperty("Custodian.UploadCache");
-			System.out.println("Destination = " + destination);
-			System.out.println("New Data To be Uploaded");
+			System.out.println("Inside CustodianSession: Destination = " + destination);
+			System.out.println("Inside CustodianSession: New Data To be Uploaded");
 			//inform service instance about new upload
 			//should have a hosts file storing cache information
 			String[] connectionInfo = destination.split(":");
 			String IP = connectionInfo[0];
-			System.out.println("IP = " + IP);
+			System.out.println("Inside CustodianSession: IP = " + IP);
 			//create control channel with the cache location
 			Registry serverRegistry = LocateRegistry.getRegistry(IP);
 			IDataServer serverStub = (IDataServer) serverRegistry.lookup(AppConfig.getProperty("Custodian.DataServer.Service") );
-			System.out.println("Calling upload inside CustodianSession.java");
+			System.out.println("Inside CustodianSession:Calling upload inside CustodianSession.java");
 			serverStub.upload(data, size,userId);
 
 			char[] bits = new char[size];
@@ -278,12 +278,12 @@ public class CustodianSession implements ICustodianSession{
 	//dest should be of format youtube.com
 	public String upload(String userContentName,int size,String dest) throws RemoteException
 	{
-		System.out.println("Inside CustodianSession.java: upload");
-		System.out.println("destination: " + dest);
+		System.out.println("Inside CustodianSession.java: upload method for three variable");
+		System.out.println("Inside CustodianSession:destination: " + dest);
 		String contentName = null;
 		try
 		{
-			System.out.println("New Data To be Uploaded");
+			System.out.println("Inside CustodianSession:New Data To be Uploaded");
 			//inform service instance about new upload
 			//dest info should be there in hosts file
 
@@ -292,7 +292,7 @@ public class CustodianSession implements ICustodianSession{
 			IRendezvous stub = (IRendezvous) registry.lookup(rendezvousService);   //config
 			List<String> l = stub.find(dest+"$serviceInstance");
 			String serviceInstanceInfo = l.get(0);
-			System.out.println("response from rendezvous:    "+l);	
+			System.out.println("Inside CustodianSession:response from rendezvous:    "+l);	
 
 			File f = new File("config/output.cfg");
 			FileOutputStream fop = new FileOutputStream(f);;				
@@ -308,13 +308,13 @@ public class CustodianSession implements ICustodianSession{
 			String[] connectionInfo = serviceInstanceInfo.split(":");
 			String IP = connectionInfo[0];
 
-			System.out.println("IP= "+IP);
+			System.out.println("Inside CustodianSession: IP= "+IP);
 			
 			//create control channel with the cache location
 			Registry serverRegistry = LocateRegistry.getRegistry(IP);
 			IUploader serverStub = (IUploader) serverRegistry.lookup(AppConfig.getProperty("Custodian.ServiceInstance.UploaderService") );    //should be config driven
 
-			System.out.println("Calling serverStub.upload");
+			System.out.println("Inside CustodianSession: Calling serverStub.upload");
 			contentName = serverStub.upload(userContentName, size,userId);
 
 
@@ -389,7 +389,7 @@ public class CustodianSession implements ICustodianSession{
 		
 		
 		notifyNeighborCaches(dataname);
-		System.out.println("Find request received by user on "+dataname);
+		System.out.println("Inside prototype.custodian.CustodianSession: Find request received by user on "+dataname);
 		if(store.contains(dataname) && store.contains(dataname+".marker"))
 		{
 			if(type == Connection.Type.USB)
@@ -411,12 +411,12 @@ public class CustodianSession implements ICustodianSession{
 		{
 			try
 			{
-				System.out.println("Requesting rendezvous");
+				System.out.println("Inside prototype.custodian.CustodianSession: Requesting rendezvous");
 				Registry registry = LocateRegistry.getRegistry(AppConfig.getProperty("Custodian.Rendezvous.IP"));    
 				String rendezvousService = AppConfig.getProperty("Custodian.Rendezvous.Service");
 				IRendezvous stub = (IRendezvous) registry.lookup(rendezvousService);   //config
 				List<String> l = stub.find(dataname);
-				System.out.println("response from rendezvous:    "+l);					
+				System.out.println("Inside prototype.custodian.CustodianSession: response from rendezvous:    "+l);					
 				
 				
 				File f = new File("config/output.cfg");
@@ -479,7 +479,7 @@ public class CustodianSession implements ICustodianSession{
 
 			}catch(Exception e)
 			{
-				System.out.println("Exception in contacting rendezvous"+e.toString());
+				System.out.println("Inside prototype.custodian.CustodianSession: Exception in contacting rendezvous"+e.toString());
 				e.printStackTrace();
 				return -1;
 			}	
@@ -489,7 +489,7 @@ public class CustodianSession implements ICustodianSession{
 	@Override
 	public String DTNUpload(String data, int size,int tcpSeg, String dest, String userId,
 			String fileType) throws RemoteException {
-		System.out.println("In CustodianSession");
+		System.out.println("Inside prototype.custodian.CustodianSession: Inside CustodianSession");
 		return null;
 	}
 

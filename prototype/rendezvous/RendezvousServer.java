@@ -38,7 +38,7 @@ public class RendezvousServer implements IRendezvous{
 			StringTokenizer st = new StringTokenizer(dataname,"$");
 			if(st.hasMoreElements())
 				rootServer = st.nextToken();		
-			System.out.println("Contacting Root Server");
+			System.out.println("Inside prototype.rendezvous.RendezvousServer: Contacting Root Server");
 			Registry registry;		
 			IRootServer stub;
 			try

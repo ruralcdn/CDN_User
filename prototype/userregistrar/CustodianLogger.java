@@ -63,7 +63,7 @@ public class CustodianLogger implements ICustodianLogin {
 	public IUserRegistrarSession authenticate_user(String userId,String password,String custodianId) throws RemoteException,AuthenticationFailedException,NotRegisteredException
 	{
 		System.out.println("Inside CustodianLogger.java: authenticate_user");
-		System.out.println("CustodianId: " + custodianId);
+		System.out.println("Inside CustodianLogger.java: CustodianId: " + custodianId);
 		if(users.get(userId).equals(password) && userCustodianLookup.get(userId).contains(custodianId))
 		{
 			//check if there's an already active custodian,then disconnect the current one and connect from the new one
@@ -95,7 +95,7 @@ public class CustodianLogger implements ICustodianLogin {
 		try {
 
 			File configFile = new File("config/UserRegistrar.cfg");
-			System.out.println("Absolute path of the file:"+configFile.getAbsolutePath());
+			System.out.println("Inside CustodianLogger.java: Absolute path of the file:"+configFile.getAbsolutePath());
 			FileInputStream fis;
 			fis = new FileInputStream(configFile);
 			new AppConfig();
@@ -112,11 +112,11 @@ public class CustodianLogger implements ICustodianLogin {
 
 			// Bind the remote object's stub in the registry
 			Registry registry = LocateRegistry.getRegistry();
-			System.out.println("Service name: "+AppConfig.getProperty("UserRegistrar.Service"));
+			System.out.println("Inside CustodianLogger.java: Service name: "+AppConfig.getProperty("UserRegistrar.Service"));
 			registry.bind(AppConfig.getProperty("UserRegistrar.Service") , stub);
 
 			System.err.println("Server ready");
-			System.out.println("Here I am the Logger ..yes THE LOGGER");
+			System.out.println("Inside CustodianLogger.java: Here I am the Logger ..yes THE LOGGER");
 		} catch (Exception e) {
 			System.err.println("Server exception: " + e.toString());
 			e.printStackTrace();

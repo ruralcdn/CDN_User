@@ -22,7 +22,7 @@ public class RootClient {
 	    stub.register("xyz","abc");
 	    stub.register("xyz","def");
 	    List<String> l = stub.find("xyz");
-	    System.out.println("response: "+l);
+	    System.out.println("Inside prototype.rootserver.RootClient: response: "+l);
 
 	    stub.deregister("xyz", "def");
 	    stub.deregister("xyz", "abc");

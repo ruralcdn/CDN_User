@@ -26,11 +26,14 @@ public class RMIServer implements IRMIServer{
 
 	public int request_data(String requesterId,String data,int offset,Connection.Type type,boolean sendMetaData,int totSeg, int curSeg) throws RemoteException
 	{
+		System.out.println("Inside NewStack.RMIServer: Level 1");
+		
 		if(store.contains(data) && store.contains(data+".marker") && type != Connection.Type.USB)
 		{
 			BlockingQueue<Packet> packetQueue = emptyQueue.poll();
 			if(packetQueue != null)
 			{
+				System.out.println("Inside NewStack.RMIServer: Level 2");
 				String bitMap = null ;
 				Segmenter segmenter = sar.getSegmenter();
 				ControlHeader header = new ControlHeader(requesterId,null,bitMap,offset,requesterId,sendMetaData);

@@ -35,7 +35,7 @@ public class AppFetcher  implements IAppFetcher {
 			{
 				String contentId = notif.getContent();
 				String content = contentId.substring(0, contentId.lastIndexOf('.'));
-				System.out.println("in AppFetcher contentId: "+content);
+				System.out.println("Inside AppFetcher contentId: "+content);
 				
 				AppStateManager.addUploadAcks(contentId);
 				if(contentKeyValueMap.containsKey(content)){
@@ -54,7 +54,7 @@ public class AppFetcher  implements IAppFetcher {
 	}
 	
 	public void uploadLog() throws RemoteException{
-		System.out.println("In AppFetcher's UploadLog");
+		System.out.println("Inside AppFetcher's UploadLog");
 		upFlag = true ;
 	}
 }

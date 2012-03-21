@@ -29,10 +29,12 @@ public class SegmentationReassembly{
 		reassembler = new Reassembler(scheduler.getDataInQueue(),store,dbStore,manager,segmentSize,logSize,downloads);
 		reassembler.start();
 		segmenter = new Segmenter(store,dbStore,segmentSize,dtnSize,logSize,scheduler.getDataFullQueues());
+		System.out.println("Inside NewStack.SegmentationReassembly: Method SegmentationReassembly");
 	}
 
 	public long countSegments(String dataname)
 	{
+		System.out.println("Inside NewStack.SegmentationReassembly: Method countSegments");
 		DataStore store ;
 		int size = segmentSize;
 		store = this.store;
@@ -51,6 +53,7 @@ public class SegmentationReassembly{
 	
 	public long countDtnSegments(String dataname)
 	{
+		System.out.println("Inside NewStack.SegmentationReassembly: Method countDtnSegments");
 		long smallchunk = (store.length(dataname)%dtnSize);
 		if(smallchunk == 0)
 			return (store.length(dataname)/dtnSize);

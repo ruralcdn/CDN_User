@@ -38,6 +38,7 @@ public class USBConnection implements Connection{
 	}
 	public void writePacket(Packet packet)
 	{
+		System.out.println("Inside newNetwork.USBConnection: Method writePacket");
 		String fileName = packet.getName();
 		String filePath = dtnStore+fileName ;
 		ObjectOutputStream out = null;
@@ -65,6 +66,7 @@ public class USBConnection implements Connection{
 
 	public void writePacketNewMethod(Packet packet)
 	{
+		System.out.println("Inside newNetwork.USBConnection: level 2");
 		String fileName = packet.getName();
 		String filePath = dtnStore+fileName ;
 		ObjectOutputStream out = null;

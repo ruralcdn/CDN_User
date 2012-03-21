@@ -28,6 +28,7 @@ public class DataWriter extends Thread{
 		{
 			try
 			{
+				System.out.println("Inside prototype.utils.DataWriter: ");
 				Map<String,byte[]> request = dataBuffers.take();
 				Iterator<String> it = request.keySet().iterator();
 				String data = it.next();

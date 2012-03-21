@@ -55,7 +55,7 @@ public class RSyncThumb extends Thread {
 					stub = (IDBServer) registry.lookup(AppConfig.getProperty("User.RSyncServer.service") );
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("RMI Problem for RSyncServer in RSyncThumb");
+					System.out.println("Inside DBSync.RSyncThumb:RMI Problem for RSyncServer in RSyncThumb");
 				}
 				/*String controlIP = dynamicIP.detectPPP();
 				String[] splitInfo = controlIP.split(",");
@@ -71,11 +71,11 @@ public class RSyncThumb extends Thread {
 						stub.infoIP(userId, splitInfo[0]);
 					} catch (Exception e) {
 						e.printStackTrace();
-						System.out.println("Error in locating service for RSyncServer");
+						System.out.println("Inside RSyncThumb:Error in locating service for RSyncServer");
 					}
 				}*/
 				String toStartCheck = dynamicIP.startThread();
-				System.out.println("In User, value of toStartCheck: "+toStartCheck);
+				System.out.println("Inside DBSync.RSyncThumb:In User, value of toStartCheck: "+toStartCheck);
 				if(toStartCheck.equals("start"))
 					dynamicIP.start();
 				else if(toStartCheck.equals("resume"))

@@ -55,7 +55,7 @@ public class NewStack
 			dynamicIP.start();
 		int size = stateManager.getTCPUploadRequests().size();
 		if(size >= 1){
-			System.out.println("Starting the uploader with size: "+size);
+			System.out.println("Inside NewStack.NewStack: Starting the uploader with size: "+size);
 			uploader.start();
 		}
 		
@@ -63,6 +63,7 @@ public class NewStack
 	
 	public NewStack(String localId,StateManager manager,DataStore dStore,DataStore usbStore,DataStore  dst,BlockingQueue<String> downloads,int serverPort,List<Integer> connectionPorts,List<String> readList)
 	{
+		System.out.println("Inside NewStack.NewStack: Method NewStack");
 		stackId = localId;
 		stateManager = manager;
 		store = dStore;
@@ -86,7 +87,7 @@ public class NewStack
 			dynamicIP.start();
 		int size = stateManager.getTCPUploadRequests().size();
 		if(size >= 1){
-			System.out.println("Starting the uploader with size: "+size);
+			System.out.println("Inside NewStack.NewStack: Starting the uploader with size: "+size);
 			uploader.start();
 		}
 		dtnReader = new DTNReader(readList,stateManager,store,dtnsegmentSize,downloads);

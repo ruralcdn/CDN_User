@@ -97,8 +97,10 @@ public class Segmenter extends Thread{
 		if(stateObj.currentSegments == 0)
 			start_time = System.currentTimeMillis();
 		int j = stateObj.currentSegments;
+		System.out.println("Inside NewStack.Segmenter: copying");
 		for( ;j < (totSeg)&& segmentQueue.remainingCapacity() > 0;j++)
 		{
+			System.out.print(".");
 			byte[] segment = store.read(readName, j*dtnSize, dtnSize);
 			Packet packet = new Packet(route,destination,PacketType.Data,sendName,
 					segment,j*dtnSize,false);
@@ -110,7 +112,8 @@ public class Segmenter extends Thread{
 		if(stateObj.currentSegments==stateObj.getTotalSegments())
 		{
 			end_time = System.currentTimeMillis();
-			System.out.println("Time spend in writing the file: "+(end_time-start_time));
+			System.out.println("Inside NewStack.Segmenter: copying end");
+			System.out.println("Inside NewStack.Segmenter: Time spend in writing the file: "+(end_time-start_time));
 			Status st = Status.getStatus();
 			st.updateState("status",sendName,-1);
 		}

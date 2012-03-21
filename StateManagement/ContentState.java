@@ -36,6 +36,7 @@ public class ContentState{
 
 	public ContentState(String contentName,String uploadName,int off,BitSet bits, int conInterface,List<String> route,int size,int curSeg,Type type,String appId,boolean sendMetaData)
 	{
+		System.out.println("Inside StateManagement.ContentState:");
 		if((type == Type.tcpUpload) || (type == Type.dtn))
 		{
 			contentId = contentName;

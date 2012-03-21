@@ -51,7 +51,7 @@ public class Logger implements ICustodian{
 	//public ICustodianSession authenticate(String username,String password) throws RemoteException,NotRegisteredException,AuthenticationFailedException
 	public ICustodianSession authenticate(String username,String password, String userNode, String controlIP) throws RemoteException,NotRegisteredException,AuthenticationFailedException
 	{
-		System.out.println("Inside Logger.java:authenticate");
+		System.out.println("Inside prototype.custodian.Logger: Authenticate method");
 		synchronized(stub)
 		{
 			sessionStub = stub.authenticate_user(username, password,networkStack.getStackId()+":"+networkStack.getServerPort()+":"+networkStack.getDTNId());
@@ -61,7 +61,7 @@ public class Logger implements ICustodian{
 		{
 			session = new CustodianSession(username,sessionStub,stateManager,appStateManager,store,networkStack);
 			ICustodianSession custodianSessionStub = (ICustodianSession) UnicastRemoteObject.exportObject(session, 0);
-			System.out.println("User authenticated,beginning session");
+			System.out.println("Inside prototype.custodian.Logger: User authenticated,beginning session");
 			return custodianSessionStub;
 		}
 		else
@@ -69,12 +69,12 @@ public class Logger implements ICustodian{
 	}
 	public boolean register(String userId,String password) throws RemoteException,AlreadyRegisteredException
 	{
-		System.out.println("Inside Logger.java:register");
+		System.out.println("Inside prototype.custodian.Logger.java:register");
 		boolean flag = false;
 		synchronized(stub)
 		{
 			flag = stub.register_user(userId, password);
-			System.out.println("UserRegistered: "+flag);
+			System.out.println("Inside prototype.custodian.Logger: UserRegistered: "+flag);
 		}
 		return flag;
 	}
@@ -85,7 +85,7 @@ public class Logger implements ICustodian{
 		synchronized(stub)
 		{
 			flag = stub.register_user_custodian(userId,networkStack.getStackId()+":"+networkStack.getServerPort()+":"+networkStack.getDTNId());
-			System.out.println("User registered withcustodian: "+flag);
+			System.out.println("Inside prototype.custodian.Logger: User registered withcustodian: "+flag);
 		}
 		return flag;
 	}

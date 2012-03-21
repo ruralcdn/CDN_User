@@ -52,7 +52,7 @@ public class CustodianAppStateManager{
 	{
 
 		try {
-
+			System.out.println("Inside StateManagement.CustodianAppStateManager:");
 			Properties state = new Properties();
 			//FileInputStream fis;
 

@@ -25,6 +25,7 @@ public class FileRegisterer extends Thread{
 	
 	public void run()
 	{
+		System.out.println("Inside prototype.cache.FileRegister: Level main");
 		while(execute)
 		{
 			try {

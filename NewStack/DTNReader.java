@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-import javax.swing.JOptionPane;
+//import javax.swing.*;
 
 import StateManagement.ContentState;
 import StateManagement.StateManager;
@@ -48,11 +48,13 @@ public class DTNReader extends Thread {
 				e2.printStackTrace();
 			}
 	        for (int i = 0; i < letters.length; ++i){
+	        	//int ln = letters.length;
+	        	//System.out.println("Inside NewStack.DTNReader: length:" + ln);
 	            boolean pluggedIn = drives[i].canRead();
 	            if (pluggedIn != isDrive[i]){
 	                if(pluggedIn)
 	                {	                
-	                    System.out.println("Drive "+letters[i]+" has been plugged in");
+	                    System.out.println("Inside NewStack.DTNReader: Drive "+letters[i]+" has been plugged in");
 	                    String str = "cmd /c \"dir "+ letters[i] + ":\"";
 	                    try{
 							Process process =Runtime.getRuntime().exec(str);
@@ -60,10 +62,11 @@ public class DTNReader extends Thread {
 							boolean file = false;
 							if(findInUSB(input,file,"DTNRouter"))
 							{
-								System.out.println("The USB key is a DTNRouter.");
+								System.out.println("Inside NewStack.DTNReader: The USB key is a DTNRouter.");
+								System.out.println("Inside NewStack.DTNReader: Block 1");//block 1
 							}
 							else{
-								System.out.println("The USB key is not a DTNRouter.");
+								System.out.println("Inside NewStack.DTNReader: The USB key is not a DTNRouter.");
 								continue;
 							}
 							//File drivePath = null;
@@ -71,16 +74,19 @@ public class DTNReader extends Thread {
 							for(int j=0;j<readingList.size();j++)
 							{
 								filePathStr = letters[i] + ":\\DTNRouter\\"+readingList.remove(0);
-								System.out.println("File Name is: "+filePathStr);
+								System.out.println("Inside NewStack.DTNReader: File Name is: "+filePathStr);
 								if(dtnFileRead(filePathStr))
-									System.out.println("File is successfully read");
+									System.out.println("Inside NewStack.DTNReader: File is successfully read");
 							}
-							System.out.println("Remove the USB drive");
-							JOptionPane.showMessageDialog(null,"Safely remove the drive");
+							//System.out.println("Remove the USB drive");
+							//JOptionPane.showMessageDialog(null,"Safely remove the drive");
+							//JFrame parent = new JFrame();
+
+						    //JOptionPane.showMessageDialog(parent, "Safely remove the drive");
 						} 
 		                catch (IOException e) 
 		                {
-							System.out.println("Error in reading or writing file");
+							System.out.println("Inside NewStack.DTNReader: Error in reading or writing file");
 							try {
 								Thread.sleep(5000);
 							} catch (InterruptedException e1) {
@@ -90,7 +96,7 @@ public class DTNReader extends Thread {
 	                }
 	                else
 	                {
-	                    System.out.println("Drive "+letters[i]+" has been unplugged");
+	                    System.out.println("Inside NewStack.DTNReader: Drive "+letters[i]+" has been unplugged");
 	                }
 	                isDrive[i] = pluggedIn;
 	            }
@@ -163,7 +169,7 @@ public class DTNReader extends Thread {
 								mpContent.put(data,conProp);
 								if(currentsegments == conProp.getTotalSegments())
 								{
-									System.out.println("In Reassembler.java Received the Complete File! :D :D :D :D :D :D :D :D :D :D :D :D ");
+									System.out.println("Inside NewStack.DTNReader: In Reassembler.java Received the Complete File! :D :D :D :D :D :D :D :D :D :D :D :D ");
 									Status st = Status.getStatus();
 									if(fileDownloads != null)
 										fileDownloads.put(data);

@@ -109,12 +109,12 @@ public class RSyncClient extends Thread {
 					stub = (IDBServer) registry.lookup(AppConfig.getProperty("User.RSyncServer.service") );
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("Error in locating service for RSyncServer");
+					System.out.println("Inside DBSync.RSyncClient:Error in locating service for RSyncServer");
 				}
 				
 				DynamicIP dynamicIP = DynamicIP.getIP();
 				String toStartCheck = dynamicIP.startThread();
-				System.out.println("In User, value of toStartCheck: "+toStartCheck);
+				System.out.println("Inside DBSync.RSyncClient:In User, value of toStartCheck: "+toStartCheck);
 				if(toStartCheck.equals("start"))
 					dynamicIP.start();
 				else if(toStartCheck.equals("resume"))
@@ -125,7 +125,7 @@ public class RSyncClient extends Thread {
 				int segments = stack.countSegments("upload.log") ;
 				boolean idle = stub.upload(userId+".log", segments, userId);
 				if(!idle){
-					System.out.println("DBSync is locked");
+					System.out.println("Inside DBSync.RSyncClient:DBSync is locked");
 					Random rand = new Random();
 					int sleepValue = rand.nextInt(1000)+5000;
 					Thread.sleep(sleepValue);
@@ -153,7 +153,7 @@ public class RSyncClient extends Thread {
 				//long startTime = System.currentTimeMillis();
 				while(!flag){
 					if(Reassembler.downLog && AppFetcher.upFlag){
-						System.out.println("Upload and download happened");
+						System.out.println("Inside DBSync.RSyncClientUpload and download happened");
 						executeLogStatement();
 						updateLogFile("download.log","cache_db.log", rsyncserver);
 						
@@ -174,7 +174,7 @@ public class RSyncClient extends Thread {
 					//	flag = true ;
 					Thread.sleep(2000);
 				}
-				System.out.println("Value of autoSync is: "+User1.autoSync);	
+				System.out.println("Inside DBSync.RSyncClient:Value of autoSync is: "+User1.autoSync);	
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
@@ -252,7 +252,7 @@ public class RSyncClient extends Thread {
 			Statement stmt = con.createStatement();
 			stmt.execute("update synctable set updated_till ="+count+" where entity ='"+Client+"'");
 			stmt.close();
-			System.out.println("Value of cp after updating: "+count);
+			System.out.println("Inside DBSync.RSyncClient:Value of cp after updating: "+count);
 			
 		}catch(Exception e)
 		{

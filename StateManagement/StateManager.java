@@ -247,25 +247,25 @@ public class StateManager
 		//System.out.println(st);
 		String contentId = stateObj.getContentId();
 		String uploadId = stateObj.getUploadId();
-		//System.out.println("contentid and upload id in StateManager.java "+" "+contentId+" "+uploadId);
+		System.out.println(" Inside StateManager.java: ContentId and UploadId "+" "+contentId+" "+uploadId);
 		String tname = "uploadrequest";
 		tcpRequestMap = st.setUploadRequsets(tname,contentId,uploadId);
 		//tcpRequestMap = st.setUploadRequsets("uploadrequest",contentId,uploadId);
 		//System.out.println(tcpRequestMap);
 		uploadRequest.add(contentId);
-		System.out.println("List size is: "+tcpRequestMap.size());//list size zero check
+		System.out.println("Inside StateManager: List size is: "+tcpRequestMap.size());//list size zero check
 		dataUp = NewStack.getDataUploader();
 		if(tcpRequestMap.size()==1 && dtnRequestMap.size()==0)
 		{
 			if(dataUp.isRunning()){
 				dataUp.start();
-				System.out.println("DataUploader is running");
+				System.out.println("Inside StateManager: DataUploader is running");
 			}	
 			else
 			{
 				dataUp.setExecute();
 				dataUp.resume();
-				System.out.println("DataUploader is resuming");
+				System.out.println("Inside StateManager: DataUploader is resuming");
 			}
 					
 		}
@@ -281,13 +281,13 @@ public class StateManager
 		String uploadId = stateObj.getUploadId();
 		dtnRequestMap = st.setUploadRequsets("dtnrequest",contentId,uploadId);
 		dtnRequest.add(contentId);
-		System.out.println("DTN list size is: "+dtnRequestMap.size());
+		System.out.println("Inside StateManager: DTN list size is: "+dtnRequestMap.size());
 		dataUp = NewStack.getDataUploader();
 		if(tcpRequestMap.size() == 0 && dtnRequestMap.size()==1)
 		{
 			if(dataUp.isRunning()){
 				dataUp.start();
-				System.out.println("DataUploader is running");
+				System.out.println("Inside StateManager:DataUploader is running");
 			}	
 			else
 			{
@@ -514,10 +514,10 @@ public class StateManager
 			fis.close();
 			List<String> uploadRequest ;
 			String uploadRequestString = state.getProperty(tcpUploadRequest);
-			System.out.println("Uploaded files name: " + uploadRequestString) ;
+			System.out.println("Inside StateManager: Uploaded files name: " + uploadRequestString) ;
 			uploadRequest = Utils.parse(uploadRequestString);
 			uploadRequest.remove(name);
-			System.out.println("upload Request now is : "+ uploadRequest.toString());
+			System.out.println("Inside StateManager: upload Request now is : "+ uploadRequest.toString());
 			state.setProperty(tcpUploadRequest, uploadRequest.toString());
 			FileOutputStream out = new FileOutputStream(status);
 			state.store(out,"--FileUpload&Download Status--");

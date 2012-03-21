@@ -97,7 +97,7 @@ public class RootServer implements IRootServer {
 	    // Bind the remote object's stub in the registry
 	    Registry registry = LocateRegistry.getRegistry();
 	    registry.bind(AppConfig.getProperty("RootServer.Service"), stub);
-	    System.out.println("Service name: "+AppConfig.getProperty("RootServer.Service"));
+	    System.out.println("Inside prototype.rootserver.RootServer: Service name: "+AppConfig.getProperty("RootServer.Service"));
 	    System.err.println("Server ready");
 	} catch (Exception e) {
 	    System.err.println("Server exception: " + e.toString());

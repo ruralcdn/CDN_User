@@ -30,6 +30,7 @@ public class ListeningScheduler{
 
 	public void close()
 	{
+		System.out.println("Inside NewStack.ListeningScheduler: level 1");
 		Set<String> listeners =  listenerConnectionPool.keySet();
 		Iterator<String> it = listeners.iterator();
 		while(it.hasNext())
@@ -49,6 +50,7 @@ public class ListeningScheduler{
 
 	public void addConnection(String Id,Connection con)
 	{
+		System.out.println("Inside NewStack.ListeningScheduler: level 2");
 		Queue<PacketListener> connectionPool = listenerConnectionPool.get(Id);
 		if(connectionPool == null)
 			connectionPool = new LinkedList<PacketListener>();

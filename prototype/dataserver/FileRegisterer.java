@@ -37,7 +37,7 @@ public class FileRegisterer extends Thread{
 			try {
 				
 				String newFile = files.take();
-				System.out.println("Requesting root server:"+AppConfig.getProperty("DataServer.RootServer.Service"));
+				System.out.println("Inside prototype.dataserver.FileRegister: Requesting root server:"+AppConfig.getProperty("DataServer.RootServer.Service"));
 				Registry registry = LocateRegistry.getRegistry(AppConfig.getProperty("DataServer.RootServer.IP"));
 				IRootServer stub = (IRootServer) registry.lookup(AppConfig.getProperty("DataServer.RootServer.Service") );
 				String location = AppConfig.getProperty("DataServer.Id")+":"+AppConfig.getProperty("DataServer.Port")+":"+AppConfig.getProperty("DataServer.Id");
@@ -46,7 +46,7 @@ public class FileRegisterer extends Thread{
 				
 				try
 				{
-					System.out.println("Upload to dataserver complete");
+					System.out.println("Inside prototype.dataserver.FileRegister: Upload to dataserver complete");
 
 					//String userContentId = AppManager.getDownloadName(newFile);
 					String requester = AppManager.getUploadRequester(newFile);
@@ -58,7 +58,7 @@ public class FileRegisterer extends Thread{
 					ICustodianLogin  userRegistrarStub = (ICustodianLogin) serverRegistry.lookup(AppConfig.getProperty("UserRegistrar.Service") );    //should be config driven
 					String custodianId = userRegistrarStub.get_active_custodian(requester).split(":")[0];
 
-					System.out.println("Active custodian is: "+custodianId);
+					System.out.println("Inside prototype.dataserver.FileRegister: Active custodian is: "+custodianId);
 					Registry custodianRegistry = LocateRegistry.getRegistry(custodianId);
 					IPubSubNode pubsubStub = (IPubSubNode) custodianRegistry.lookup(AppConfig.getProperty("PubSub.Service") );
 					Notification notification = new Notification(Notification.Type.UploadAck,requester+":"+newFile);

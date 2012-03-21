@@ -31,7 +31,7 @@ public class CacheServer implements ICacheServer{
 
 	public void notify(String contentId) throws RemoteException
 	{
-		System.out.println("received notifcation about content"+contentId);
+		System.out.println("Inside prototype.cache.CacheServer: received notifcation about content"+contentId);
 	}
 	public String upload(String myContentName,int segments,String serviceInstance, String username, String fileType) throws RemoteException{
 		
@@ -62,6 +62,7 @@ public class CacheServer implements ICacheServer{
 	}
 	public static void main(String args[])
 	{
+		System.out.println("Inside prototype.cache.CacheServer: Level main");
 		String config = new String("config/CacheServer.cfg");
 		File configFile = new File(config);
 		FileInputStream fis;

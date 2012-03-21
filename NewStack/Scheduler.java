@@ -91,7 +91,7 @@ public class Scheduler{
 
 	public void addConnection(String Id,Connection con)
 	{
-		System.out.println("Adding the connection in the schedular to the conId "+ Id+" in Schedular.java");
+		System.out.println("Inside NewStack.Scheduler: Adding the connection in the schedular to the conId "+ Id+" in Schedular.java");
 		List<Connection> cons = connectionPool.get(Id);
 		if(cons == null)
 			cons = new ArrayList<Connection>();
@@ -102,7 +102,7 @@ public class Scheduler{
 		if(connectionPool.values().size() == 1 && !execute)
 		{
 			execute = true;
-			System.out.println("starting the schedulars for sending and receiving in Scheduler.java");
+			System.out.println("Inside NewStack.Scheduler: starting the schedulars for sending and receiving in Scheduler.java");
 			sscheduler.start();
 		}
 	}
@@ -126,17 +126,17 @@ public class Scheduler{
 			
 			if(cons.get(i).equals(con)){
 				cons.remove(i);
-				System.out.println("Removing Connection");
+				System.out.println("Inside NewStack.Scheduler: Removing Connection");
 			}	
 		}
-		System.out.println("Connection' size: "+cons.size());
+		System.out.println("Inside NewStack.Scheduler: Connection' size: "+cons.size());
 		if(cons.size() == 0){
 			
 			connectionPool.remove(destination);
 			Set<String> destinationSet = connectionPool.keySet();
 			Iterator<String> it = destinationSet.iterator();
 			while(it.hasNext())
-				System.out.println("destinationset in Scheduler: "+it.next());
+				System.out.println("Inside NewStack.Scheduler: destinationset in Scheduler: "+it.next());
 		}
 			
 	}
@@ -161,7 +161,7 @@ public class Scheduler{
 			Set<String> destinationSet = connectionPool.keySet();
 			Iterator<String> it = destinationSet.iterator();
 			while(it.hasNext())
-				System.out.println("destinationset in Scheduler: "+it.next());
+				System.out.println("Inside NewStack.Scheduler: destinationset in Scheduler: "+it.next());
 		}	
 	}
 }

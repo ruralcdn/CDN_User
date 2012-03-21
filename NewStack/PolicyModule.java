@@ -27,7 +27,9 @@ public class PolicyModule{
 	
 	public Connection.Type getConnectionType(String Id)
 	{
+		System.out.println("Inside NewStack.PolicyModule: Get Connection Name");
 		Connection.Type type = policyMap.get(Id);
+		System.out.println("Inside NewStack.PolicyModule: Type Value" +type);
 		if(type == null)
 			return defaultType;
 		else

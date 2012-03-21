@@ -16,7 +16,7 @@ public class TCPServer implements Runnable{
 	public TCPServer(Scheduler sched,int port){
 		serverport = port;
 		server = new TCPServerConnection(serverport);
-		System.out.println("Server Ready");
+		System.out.println("Inside NewStack.TCPServer: Server Ready");
 		scheduler = sched;
 		execute = true;
 	}
@@ -32,7 +32,7 @@ public class TCPServer implements Runnable{
 			while(execute)
 			{
 				Connection con = server.accept();
-				System.out.println("connection accepted");
+				System.out.println("Inside NewStack.TCPServer: connection accepted");
 				//connectionPool.add(con);
 				try {
 					InputStream inStream = con.getInputStream();
@@ -82,7 +82,7 @@ public class TCPServer implements Runnable{
 						//System.out.println("Read Authentication packet :) from socket stream");
 
 						scheduler.addConnection(sourceId, con);
-						System.out.println("User Authentication Done userId: "+sourceId);
+						System.out.println("Inside NewStack.TCPServer: User Authentication Done userId: "+sourceId);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -92,14 +92,14 @@ public class TCPServer implements Runnable{
 			}
 		}catch(IOException e)
 		{
-				System.out.println("IOException while acception connection");
+				System.out.println("Inside NewStack.TCPServer: IOException while acception connection");
 				e.printStackTrace();	
 		}finally{
 			try {
 				server.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				System.out.println("IOException while closing server");
+				System.out.println("Inside NewStack.TCPServer: IOException while closing server");
 				e.printStackTrace();
 			}
 		}	

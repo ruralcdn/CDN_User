@@ -29,7 +29,7 @@ public class DynamicIP extends Thread {
     
     @SuppressWarnings("deprecation")
 	public void run(){
-    	System.out.println("Starting DynamicIP");
+    	System.out.println("Inside NewStack.DynamicIP: Starting DynamicIP");
     	while(true){
     		try {
 				Thread.sleep(1000);
@@ -63,7 +63,7 @@ public class DynamicIP extends Thread {
 						
 					} catch (Exception e) {
 						e.printStackTrace();
-						System.out.println("Error in locating service for Custodian");
+						System.out.println("Inside NewStack.DynamicIP: Error in locating service for Custodian");
 						controlIP = "";
 					}
     			}
@@ -72,7 +72,7 @@ public class DynamicIP extends Thread {
     		Status st = Status.getStatus();
     		if(!st.executeQuery("select * from status")){
     			flag = false ;
-    			System.out.println("Nothing in Status file");
+    			System.out.println("Inside NewStack.DynamicIP: Nothing in Status file");
     			suspend();
     		}
     	}

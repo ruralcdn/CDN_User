@@ -49,7 +49,7 @@ public class Status{
 	public void insertData(String table, String contentId, int type, int totseg, int curseg, int off, int prefint, String prefrt, String appid, int sendmetadata, String prefrtport ){
 
 		try{
-			//System.out.println("table name:"+table);
+			System.out.println("Inside Status: table 1:"+table);
 			prep = con.prepareStatement("insert into "+table+" values(?,?,?,?,?,?,?,?,?,?)");
 			prep.setString(1,contentId);
 			prep.setInt(2,type);
@@ -73,6 +73,7 @@ public class Status{
 	public void insertData(String table, String dataServerId, String cacheServerId ){
 
 		try{
+			System.out.println("Inside Status: table 2:"+table);
 			prep = con.prepareStatement("insert into "+table+" values(?,?,?)");
 			prep.setString(1,dataServerId);
 			prep.setString(2,cacheServerId);
@@ -138,7 +139,7 @@ public class Status{
 			stat.close();
 		}catch(Exception e){
 			//e.printStackTrace();
-			System.out.println("Exception occurs at execQuery2");
+			System.out.println("Inside Status: Exception occurs at execQuery2");
 		}		
 		return st ;
 	}	
@@ -169,7 +170,7 @@ public class Status{
 			stat.close();
 		} catch (Exception e) {
 			//e.printStackTrace();
-			System.out.println("Exception occurs at execquery3");
+			System.out.println("Inside Status: Exception occurs at execquery3");
 		}
 		return uploadedList;
 	}
@@ -196,7 +197,7 @@ public class Status{
 
 		}catch(Exception e){
 			//e.printStackTrace();
-			System.out.println("Exception occurs at updateData");
+			System.out.println("Inside Status: Exception occurs at updateData");
 		}	
 	}	
 
@@ -237,7 +238,7 @@ public class Status{
 	public Map<String,String> setUploadRequsets(String table, String contentId, String uploadId){
 		Map<String,String> uploadRequestList = new HashMap<String,String>();
 		try{
-			System.out.println("Table Name = " + table);
+			System.out.println("Inside Status:Table Name = " + table);
 			prep = con.prepareStatement("insert into "+table+" values(?,?) ");
 			//System.out.println("table name 2:"+table);
 			//System.out.println("contentId & uploadId"+" "+contentId+" "+uploadId);
@@ -329,7 +330,7 @@ public class Status{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("Exception occurs at getPendingStatus");
+			System.out.println("Inside Status: Exception occurs at getPendingStatus");
 		}
 		return map ;
 	}
@@ -348,7 +349,7 @@ public class Status{
 			stat.close();
 		}
 		catch(Exception e){
-			System.out.println("Value of flag in executeQuery(String str) is :"+flag);
+			System.out.println("Inside Status: Value of flag in executeQuery(String str) is :"+flag);
 			
 		}
 		return flag;	

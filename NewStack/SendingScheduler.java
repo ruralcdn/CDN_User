@@ -85,7 +85,7 @@ public class SendingScheduler extends Thread{
 		{
 			String destination = packet.getDestination();
 			//int segNo = packet.getSequenceNumber();
-			//System.out.println("In Sending Scheduler destination: "+destination);
+			System.out.println("Inside NewStack.SendingScheduler: destination: "+destination);
 			Connection.Type type = policyModule.getConnectionType(packet.getDestination());
 			Queue<Connection> connections = senderConnectionPool.get(destination);
 			if(connections != null)
@@ -128,7 +128,7 @@ public class SendingScheduler extends Thread{
 								}
 								
 								destinationConnectionIds.remove(st);
-								System.out.println("destinationConnectionIds in Sending Scheduler: " + destinationConnectionIds);
+								System.out.println("Inside NewStack.SendingScheduler: destinationConnectionIds in Sending Scheduler: " + destinationConnectionIds);
 								LinkDetector.setDestinationIds(destinationConnectionIds);
 								senderConnectionPool.remove(destination);
 							}	
@@ -139,7 +139,7 @@ public class SendingScheduler extends Thread{
 					}
 					else
 					{
-						///System.out.println("Sending DTN Packet");
+						System.out.println("Inside NewStack.SendingScheduler: Sending DTN Packet");
 						try
 						{
 							con.writePacket(packet);

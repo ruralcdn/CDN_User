@@ -23,6 +23,7 @@ public class Packet implements Serializable{
 
 	public Packet(PacketType t,String n,byte[]d,int seq_no,String dest,boolean isMeta)
 	{
+		System.out.println("Inside NewStack.Packet: Method Packet 1");
 		type = t;
 		name = n;
 		data = d;
@@ -38,6 +39,7 @@ public class Packet implements Serializable{
 	//Authentication Packet
 	public Packet(String conId)
 	{
+		System.out.println("Inside NewStack.Packet: Method Packet 2");
 		type = PacketType.Authentication;
 		connectionId = conId;
 		AuthenticationPacketLen = 4+4+connectionId.length();
@@ -49,6 +51,7 @@ public class Packet implements Serializable{
 	//DTN PAcket
 	public Packet(List<String> preferredRoute,String dest,PacketType t,String n,byte[]d,int seq_no,boolean isMeta)
 	{
+		System.out.println("Inside NewStack.Packet: Method Packet 3");
 		type = t;
 		name = n;
 		data = d;
@@ -75,6 +78,7 @@ public class Packet implements Serializable{
 	}
 	private void createAuthenticationPacket()
 	{
+		System.out.println("Inside NewStack.Packet: Method createAuthenticationPacket");
 		//type, connectionId's length and connectionId
 		int len = 4;
 		int off = 0;
@@ -168,6 +172,7 @@ public class Packet implements Serializable{
 	}
 	private void createPacket()
 	{
+		System.out.println("Inside NewStack.Packet: Method createPacket");
 		//order of sending data - type,ismetadata variable,seqNo,name's length,data's length,name,data
 		int len = 4;
 		int off = 0;

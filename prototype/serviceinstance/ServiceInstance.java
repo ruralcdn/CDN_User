@@ -91,7 +91,7 @@ public class ServiceInstance implements IUploader{
 	public String upload(String data,int size,String requester) throws RemoteException
 	{
 		
-		System.out.println("Inside ServiceInstance.java: upload");
+		System.out.println("Inside prototype.serviceinstance.ServiceInstance: upload");
 		String contentName = null;
 
 		char[] bits = new char[size];
@@ -218,7 +218,7 @@ public class ServiceInstance implements IUploader{
 			IUploader uploaderStub = (IUploader) UnicastRemoteObject.exportObject(obj, 0); 
 			Registry registry1 = LocateRegistry.getRegistry();
 			registry1.bind(AppConfig.getProperty("ServiceInstance.UploaderService"), uploaderStub);
-			System.out.println("Service Instance ready");
+			System.out.println("Inside ServiceInstance:Service Instance ready");
 
 		} catch (Exception e) {
 			System.err.println("Client exception: " + e.toString());

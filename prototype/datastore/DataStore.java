@@ -32,7 +32,7 @@ public class DataStore{
 	        //File length
 	        int size = (int)file.length(); 
 	        if (size > Integer.MAX_VALUE){
-	          System.out.println("File is to larger");
+	          System.out.println("Inside prototype.datastore.DataStore: File is to larger");
 	        }
 	        byte[] bytes = new byte[size]; 
 	        try{
@@ -46,7 +46,7 @@ public class DataStore{
 	       // System.out.println("File size: " + read);
 	        // Ensure all the bytes have been read in
 	        if (read < bytes.length) {
-	          System.out.println("Could not completely read: "+file.getName());
+	          System.out.println("Inside prototype.datastore.DataStore: Could not completely read: "+file.getName());
 	        }
 	        dis.close();
 	      }
@@ -83,7 +83,7 @@ public class DataStore{
 	        
 	        // Ensure all the bytes have been read in
 	        if (read < bytes.length) {
-	          System.out.println("Could not completely read: "+file.getName()+" thru method read datastore.java");
+	          System.out.println("Inside prototype.datastore.DataStore: Could not completely read: "+file.getName()+" thru method read datastore.java");
 	        }
 	        dis.close();
 	      }
@@ -101,7 +101,7 @@ public class DataStore{
 	public synchronized boolean write(String dataname,byte[] data) 
 	{
 		
-		System.out.println("File name: in write method "+dataname+" path= "+dirPath+" thru method write datastore.java");
+		System.out.println("Inside prototype.datastore.DataStore: File name: in write method "+dataname+" path= "+dirPath+" thru method write datastore.java");
 		File file = new File(dirPath+dataname);
 		try
 		{
@@ -140,7 +140,7 @@ public class DataStore{
 	public synchronized boolean append(String dataname,byte[] data) 
 	{
 		
-		System.out.println("File name: in write method "+dataname+" path= "+dirPath+" thru method append datastore.java");
+		System.out.println("Inside prototype.datastore.DataStore: File name: in write method "+dataname+" path= "+dirPath+" thru method append datastore.java");
 		File file = new File(dirPath+dataname);
 		try
 		{

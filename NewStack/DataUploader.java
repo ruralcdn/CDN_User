@@ -72,16 +72,16 @@ public class DataUploader extends Thread{
 					String request = tcpUploadData.remove(0);  
 					ContentState stateObject = stateManager.getStateObject(request, ContentState.Type.tcpUpload);
 					//ContentState stateObject = stateManager.getStateObject(request, ContentState.Type.dtn);
-					System.out.println("state object:"+stateObject);
+					System.out.println("Inside NewStack.Datauploader: state object:"+stateObject);
 					String destination =" ";
 					try{
 						destination = stateObject.getPreferredRoute().get(0);
 					}catch(NullPointerException ex){
 						ex.printStackTrace();
 					}
-					System.out.println("Datauploader-destination:"+destination);
+					System.out.println("NewStack.Inside Datauploader: level 1");
 					String[] conInfo = destination.split(":");
-					System.out.println("Datauploader-conInfo:"+conInfo);
+					//System.out.println("Datauploader-conInfo:"+conInfo);
 					// COMMENTED BY ARVIND FOR usb TESTING
 					//ldetector.addDestination(destination);
 					while(!destinationSet.contains(conInfo[0]) && count <= size)
@@ -98,7 +98,7 @@ public class DataUploader extends Thread{
 						}
 						conInfo = destination.split(":"); 
 						ldetector.addDestination(destination);
-						System.out.println("Value of Count in DataUploader::run()= "+count) ;
+						System.out.println("Inside NewStack.Datauploader: Value of Count in DataUploader::run()= "+count) ;
 						tcpUploadData.add(tcpUploadData.size(),request);//Now added
 						
 					}
@@ -163,13 +163,13 @@ public class DataUploader extends Thread{
 										ex.printStackTrace();
 									}
 								}
-								System.out.println("Cache Found.");	
+								System.out.println("Inside NewStack.DataUploader: Cache Found.");	
 								try {
 									
 									if(pendingContent.containsKey(contentName)){
 										
 										pendingPackets = pendingContent.get(contentName);
-										System.out.println("Number of pending packets is: "+pendingPackets.size());
+										System.out.println("Inside NewStack.Datauploader: Number of pending packets is: "+pendingPackets.size());
 										String finalDestination = stateObject.getPreferredRoute().get(0).split(":")[0];
 										policyModule.setPolicy(finalDestination, Connection.Type.values()[stateObject.getPreferredInterface()]);
 										ControlHeader header1 = new ControlHeader(stateObject.getAppId(),null,bitMap,stateObject.getOffset(),finalDestination,stateObject.getMetaDataFlag());
@@ -189,7 +189,7 @@ public class DataUploader extends Thread{
 										}	
 										if(pendingPackets.size()!= 0){
 											pendingContent.put(contentName, pendingPackets);
-											System.out.println("Number of pending packets is: "+pendingPackets.size());
+											System.out.println("Inside NewStack.Datauploader: Number of pending packets is: "+pendingPackets.size());
 											String finalDestination = stateObject.getPreferredRoute().get(0).split(":")[0];
 											policyModule.setPolicy(finalDestination, Connection.Type.values()[stateObject.getPreferredInterface()]);
 											ControlHeader header1 = new ControlHeader(stateObject.getAppId(),null,bitMap,stateObject.getOffset(),finalDestination,stateObject.getMetaDataFlag());
@@ -198,11 +198,11 @@ public class DataUploader extends Thread{
 											continue;
 										}
 										else{
-											System.out.println("There are no pending packets for the uploading content: "+contentName);
+											System.out.println("Inside NewStack.Datauploader: There are no pending packets for the uploading content: "+contentName);
 										}
 									}
 								} catch (RemoteException e) {
-									System.out.println("Problem in contacting through RMI");
+									System.out.println("Inside NewStack.Datauploader: Problem in contacting through RMI");
 									tcpUploadData.add(tcpUploadData.size(),request);
 									emptyQueue.put(packetQueue);
 									continue;
@@ -214,7 +214,7 @@ public class DataUploader extends Thread{
 									mpContentState.remove(request);
 									execute = false ;
 									stateManager.setTCPUPloadRequestList(tcpUploadData);
-									System.out.println("Execute = " + execute);	
+									System.out.println("Inside NewStack.Datauploader: Execute = " + execute);	
 									emptyQueue.put(packetQueue);
 									suspend();
 																	
@@ -257,7 +257,7 @@ public class DataUploader extends Thread{
 					if(!intersect ){
 						dtnData.add(dtnData.size(),request);
 						emptyQueue.put(packetQueue);
-						System.out.println("No USB Key found");
+						System.out.println("Inside NewStack.Datauploader: No USB Key found");//amit dubey
 						Thread.sleep(2000);
 					}	
 					else if(stateObject.currentSegments != stateObject.getTotalSegments())
@@ -268,21 +268,25 @@ public class DataUploader extends Thread{
 						policyModule.setPolicy(finalDestination, Connection.Type.USB);
 						segmenter.sendDTNSegments(stateObject.getContentId(),stateObject.getUploadId() , header, packetQueue,stateObject.getTotalSegments(),stateObject.getCurrentSegments());
 						dtnData.add(dtnData.size(),request);
+						System.out.println("Inside NewStack.DataUploader:");
 					}
 					else{
 						List<String> tcpRequest = stateManager.getTCPUploadRequests();
 						if(dtnData.size()== 0 && tcpRequest.size()==0){
 							stateManager.setDTNRequestList(dtnData);
 							emptyQueue.put(packetQueue);
-							System.out.println("No Upload request for either TCP or USB");
+							System.out.println("Inside NewStack.Datauploader: No Upload request for either TCP or USB");
 							ldetector.removeDTNdestination(destination);
 							execute = false ;
 							suspend();
+							System.out.println("Inside NewStack.DataUploader: Block2");
 						}
 						else{
-							System.out.println("Some Upload request for either TCP or USB");
+							System.out.println("Inside NewStack.Datauploader: Some Upload request for either TCP or USB");
+			
 							stateManager.setDTNRequestList(dtnData);
 							emptyQueue.put(packetQueue);
+							System.out.println("Inside NewStack.DataUploader: Block3");
 						}
 					}	
 				}
@@ -291,9 +295,7 @@ public class DataUploader extends Thread{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		
+		}		
 
 	}
 

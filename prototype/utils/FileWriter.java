@@ -17,6 +17,7 @@ public class FileWriter extends Thread{
 	    }
 	
 	   public void run(){
+		   System.out.println("Inside prototype.utils.FileWriter:");
 		   while(buffer.peek()!= null || !flag)
 		   {
 		   byte[] bytes = buffer.poll();
@@ -27,7 +28,7 @@ public class FileWriter extends Thread{
 		   fos.close();
 		   }catch(Exception e)
 		   {
-			   System.out.println("FileNotFoundException: "+e.getMessage());
+			   System.out.println("Inside FileWriter:FileNotFoundException: "+e.getMessage());
 		   }
 		   }
 		   

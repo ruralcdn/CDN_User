@@ -28,7 +28,7 @@ public class ListNets extends Thread{
 				if(ip.size() != 0 && !ip.get(0).equals(ipPPP) ){
 					ipPPP = ip.get(0) ;
 					String pppAd = ip.get(0).getHostAddress();
-					System.out.println("PPP ip is "+pppAd);
+					System.out.println("Inside NewStack.ListNets: PPP ip is "+pppAd);
 					Runtime rt = Runtime.getRuntime();
 					rt.exec("route add 124.124.247.2 "+pppAd);
 				}
@@ -90,7 +90,7 @@ public class ListNets extends Thread{
 		ListNets listNets = new ListNets();
 		List<InetAddress> inetAdd = listNets.getLocalIps();;
 		for(int i = 0 ; i < inetAdd.size(); i++){
-			System.out.println("IP Address is "+inetAdd.get(i));
+			System.out.println("Inside NewStack.Listnets: IP Address is "+inetAdd.get(i));
 			
 		}
 		

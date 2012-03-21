@@ -22,7 +22,8 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 
 import org.apache.commons.io.FileSystemUtils;
 import AbstractAppConfig.AppConfig;
@@ -137,17 +138,18 @@ public class LinkDetector extends Thread{
 		{
 			InetAddress add = InetAddress.getByName(connectionInfo[0]);
 			int port = Integer.parseInt(connectionInfo[1]);
-			System.out.println("Port number is :"+ port);
+			System.out.println("Inside NewStack.LinkDetector: level1");
+			//System.out.println("Port number is :"+ port);
 			if(!destinationConnectionIds.contains(destination))
 			{
-				System.out.println("Adding the Destinations in Scheduler");
-				System.out.println("local ip"+ localIPs);
-				System.out.println("local ip size:"+ localIPs.size());
+				//System.out.println("Adding the Destinations in Scheduler");
+				//System.out.println("local ip"+ localIPs);
+				//System.out.println("local ip size:"+ localIPs.size());
 				//Initially value of i=0(amit)
 				for(int i = 4;i < localIPs.size();i++)
 				{
 					local = InetAddress.getByName(localIPs.get(i));
-					System.out.println("local value is :"+ local);
+					System.out.println("Inside NewStack.LinkDetector: local value is :"+ local);
 					if(!connectionPorts.isEmpty())
 					{
 						dataConnectionId++;
@@ -160,22 +162,22 @@ public class LinkDetector extends Thread{
 								connectionPorts.remove(0);
 							}catch(Exception ex){
 								ex.printStackTrace();
-								System.out.println("Exception linkdetecter:line 160");
+								System.out.println("Inside NewStack.LinkDetector: Exception line 160");
 							}
 							
-							System.out.println("New Connection created thru method addDes in Link Detct elseif");
+							System.out.println("Inside NewStack.LinkDetector: New Connection created thru method addDes in Link Detct elseif");
 							Packet packet = new Packet(connectionId); // authentication packet 
 							con.writePacket(packet);
 							flag = false ;
-							System.out.println("NEW Connection Established in link detectorthru method addDes in Link Detct elseif");
+							System.out.println("Inside NewStack.LinkDetector: NEW Connection Established in link detectorthru method addDes in Link Detct elseif");
 							scheduler.addConnection(connectionInfo[0],con);
 							destinationConnectionIds.add(destination);
 						}
 						catch (ConnectException e)
 						{
 							e.printStackTrace();
-							System.out.println("Exception in the LinkDetecter.java");
-							System.out.println("Serever is terminated or Network unreachable");
+							System.out.println("Inside NewStack.LinkDetector: Exception in the LinkDetecter.java");
+							System.out.println("Inside NewStack.LinkDetector: Serever is terminated or Network unreachable");
 							mpUp = StateManager.getUpMap();
 							Set<String> key = mpUp.keySet();
 							Iterator<String> it = key.iterator();
@@ -196,7 +198,7 @@ public class LinkDetector extends Thread{
 						catch (IOException e)
 						{
 							e.printStackTrace();
-							System.out.println("Link Failure occured");
+							System.out.println("Inside NewStack.LinkDetector: Link Failure occured");
 							if(!flag)
 							{
 								mpUp = StateManager.getUpMap();
@@ -230,7 +232,7 @@ public class LinkDetector extends Thread{
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("Exception 1 in LinkDetector");
+			System.out.println("Inside NewStack.LinkDetector: exception line 235");
 		}
 	}
 	public boolean addDTNDestination(String destination){
@@ -270,8 +272,13 @@ public class LinkDetector extends Thread{
 		String[] connectionInfo = destination.split(":");
 		dtnDestinationIds.remove(destination);
 		scheduler.removeDTNConnection(connectionInfo[0]);
-		System.out.println("Safely remove drive:LinkDetector:removeDestination()");
-		JOptionPane.showMessageDialog(null,"Safely remove drive");
+		
+		JFrame parent = new JFrame();
+
+	    JOptionPane.showMessageDialog(parent, "Now Safely remove drive");
+	    
+		System.out.println("Inside NewStack.LinkDetector: Safely remove drive:LinkDetector:removeDestination()");
+		//JOptionPane.showMessageDialog(null,"Safely remove drive");
 	}
 	
 	public void removeDestination(String destination)
@@ -291,7 +298,7 @@ public class LinkDetector extends Thread{
             {
                 if(pluggedIn)
                 {	                
-                    System.out.println("Drive "+letters[i]+" has been plugged in");
+                    System.out.println("Inside NewStack.LinkDetector: Drive "+letters[i]+" has been plugged in");
                     String str = "cmd /c \"dir "+ letters[i] + ":\"";
                     boolean execute = true;
                     while(execute)
@@ -304,21 +311,24 @@ public class LinkDetector extends Thread{
 							
 							if(findInUSB(input,file,"DTNRouter"))
 							{
-								System.out.println("The USB key is a DTNRouter.\nPlease do not unplugged it until all request copied in the USB");
+								System.out.println("Inside NewStack.LinkDetector: The USB key is a DTNRouter.\nPlease do not unplugged it until all request copied in the USB");
 								dtnDir = letters[i] + ":DTNRouter\\";
 								long spaceAvail = FileSystemUtils.freeSpaceKb(dtnDir);
 								int dtnSize = Integer.parseInt(AppConfig.getProperty("NetworkStack.dtnSegmentSize"));
+								System.out.println("Inside LinkDetector: DTN Size is "+ dtnSize);
 								int spaceReq = 2*(dtnSize/1024)* seg ;
-								System.out.println("Available space is: "+spaceAvail+" space needed is: "+spaceReq);
+								System.out.println("Inside NewStack.LinkDetector: Available space is: "+spaceAvail+" space needed is: "+spaceReq);
 								if(spaceAvail < spaceReq){
 									return null ;
+									//a compression function can be implement here
 								}
+								System.out.println("Inside NewStack.LinkDetector line 323");//line 323
 							}
 							execute = false; // to terminate the loop
 						} 
 	                    catch (IOException e) 
 	                    {
-							System.out.println("Error in reading or writing file");
+							System.out.println("Inside NewStack.LinkDetector: Error in reading or writing file");
 							try {
 								Thread.sleep(5000);
 							} catch (InterruptedException e1) {
@@ -330,7 +340,7 @@ public class LinkDetector extends Thread{
                 }
                 else
                 {
-                    System.out.println("Drive "+letters[i]+" has been unplugged");
+                    System.out.println("Inside NewStack.LinkDetector: Drive "+letters[i]+" has been unplugged");
                 }
 
                 isDrive[i] = pluggedIn;
@@ -348,7 +358,7 @@ public class LinkDetector extends Thread{
 	public static void setDestinationIds(List<String> destinationIds)
 	{
 		destinationConnectionIds = destinationIds ;
-		System.out.println("destinationConnectionIds in Link Detector: " + destinationConnectionIds);
+		System.out.println("Inside NewStack.LinkDetector: destinationConnectionIds in Link Detector: " + destinationConnectionIds);
 		
 	}
 	public void close()
@@ -371,7 +381,7 @@ public class LinkDetector extends Thread{
 				StateManager usbStateManager = new StateManager(null);
 				if(DTNStatusFile.exists() && !DTNlink)
 				{
-					System.out.println("Found DTN link :)");		
+					System.out.println("Inside LinkDetector: Found DTN link :)");		
 					File configFile = store.getFile(AppConfig.getProperty("DTN.Router.ConfigFile"));
 					Properties Config = new Properties();
 					FileInputStream fis;
@@ -429,7 +439,7 @@ public class LinkDetector extends Thread{
 					String ip = IPs[j].getHostAddress();
 					if(!localIPs.contains(ip))
 					{
-						System.out.println("IP:" + ip);
+						System.out.println("Inside NewStack.LinkDetector: IP:" + ip);
 						InetAddress localIP = IPs[j];
 						for(int i = 0;i < destinationConnectionIds.size();i++){
 							dataConnectionId++;
@@ -441,14 +451,14 @@ public class LinkDetector extends Thread{
 								int port = Integer.parseInt(connectionInfo[1]);
 								Connection con = new TCPConnection(dataConnectionId,IP,port,localIP,connectionPorts.get(0));
 								connectionPorts.remove(0);
-								System.out.println("New Connection created in run method");
+								System.out.println("Inside NewStack.LinkDetector: New Connection created in run method");
 								Packet packet = new Packet(connectionId);
 								con.writePacket(packet);
-								System.out.println("NEW Connection Established in link detector in run method");
+								System.out.println("Inside NewStack.LinkDetector: NEW Connection Established in link detector in run method");
 								scheduler.addConnection(connectionInfo[0],con);
 							}
 							else
-								System.out.println("local port unavailable");
+								System.out.println("Inside NewStack.LinkDetector: local port unavailable");
 						}
 
 						localIPs.add(ip);

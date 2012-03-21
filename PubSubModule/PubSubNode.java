@@ -18,6 +18,7 @@ public class PubSubNode implements IPubSubNode{
 	
 	public void notify(Notification notification) throws RemoteException
 	{
+		System.out.println("Inside PubSubModule.PubSubModule: ");
 		if(nodes == null && appStateManager != null)
 		{
 			if(notification.getNotificationType() == Notification.Type.UploadAck)

@@ -24,7 +24,7 @@ public class PacketListener extends Thread{
 	
 	public void run()
 	{
-		System.out.println("listening in packetListener.java");
+		System.out.println("Inside NewStack.PacketListener:");
 		while(execute)
 		{	
 			
@@ -38,7 +38,7 @@ public class PacketListener extends Thread{
 			}catch(Exception e)
 			{
 				//e.printStackTrace();
-				System.out.println("No Connection is available");
+				System.out.println("Inside NewStack.PacketListener: No Connection is available");
 				execute = false ;
 			}
 

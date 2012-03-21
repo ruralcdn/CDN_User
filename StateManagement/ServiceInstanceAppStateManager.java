@@ -69,7 +69,8 @@ public class ServiceInstanceAppStateManager{
 	public synchronized void setRequesterDetail(String uploadId,/*String downloadId,*/String requesterId)
 	{
 		try {
-
+			
+			System.out.println("Inside StateManagement.ServiceInstanceAppStateManager:");
 			Properties state = new Properties();
 			//FileInputStream fis;
 
