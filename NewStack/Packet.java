@@ -58,12 +58,17 @@ public class Packet implements Serializable{
 		sequenceNumber = seq_no;
 		route = preferredRoute;
 		destination = dest;
-		TCPPacketLen = 20+name.length()+data.length;
+		//TCPPacketLen = 20+name.length()+data.length;
+		TCPPacketLen =20+name.length()+data.length;
 		//DTNHeaderLen = 4+4+4*route.size();
 		packet = new byte[TCPPacketLen]; //new byte[16+4+4+4*route.size()+n.length()+d.length];
 		DTNFlag = true;
 		isMetaData = isMeta;
-		createPacket();		
+		try{
+			createPacket();		
+		}catch(Exception ex){
+			//ex.printStackTrace();
+		}
 
 	}
 

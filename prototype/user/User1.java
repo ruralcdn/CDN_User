@@ -788,17 +788,18 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		if(host.size()!=0){
 			InetAddress hostIP = InetAddress.getByName(AppConfig.getProperty("User.Custodian.PublicIP"));
 			
-			//COMMENTED BY AMIT DUBEY
-			//System.out.println("IP:"+hostIP.getHostAddress());
-			//InetAddress thisIp =InetAddress.getLocalHost();
-			//System.out.println("IP:"+thisIp.getHostAddress());
+			/*//COMMENTED BY AMIT DUBEY
+			System.out.println("IP:"+hostIP.getHostAddress());
+			InetAddress thisIp =InetAddress.getLocalHost();
+			System.out.println("IPs:"+thisIp.getHostAddress());*/
 			
 			String hostName = hostIP.getHostAddress();
 			//System.out.println("host"+host);
 			int i = host.size();
-			//System.out.println("hostname is " + host.get(0).getHostAddress());
+			
 			Runtime.getRuntime().exec("route add "+hostName+" "+host.get(i-1).getHostAddress());
 			//Runtime.getRuntime().exec("route add "+hostName+" "+host.get(0).getHostAddress());
+			//System.out.println("hostname is " + host.get(0).getHostAddress());
 			System.out.println("Inside User1:Value of PPP is "+host.get(i-1).getHostAddress());
 		}	
 		

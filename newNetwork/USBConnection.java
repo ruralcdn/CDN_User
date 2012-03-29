@@ -49,6 +49,8 @@ public class USBConnection implements Connection{
 		else
 			out = new AppendableObjectOutputStream (new FileOutputStream (filePath, true));
 		out.writeObject(packet);
+		long filesize = file.length()/1024;
+		System.err.println("File Size Is: "+filesize+"KB");
         out.flush ();
 		}
 		catch(Exception e){

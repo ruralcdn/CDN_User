@@ -128,7 +128,12 @@ public class DataUploader extends Thread{
 								String finalDestination = stateObject.getPreferredRoute().get(0).split(":")[0];
 								policyModule.setPolicy(finalDestination, Connection.Type.values()[stateObject.getPreferredInterface()]);
 								header = new ControlHeader(stateObject.getAppId(),null,bitMap,stateObject.getOffset(),finalDestination,stateObject.getMetaDataFlag());
-								segmenter.sendSegments(stateObject.getContentId(),stateObject.getUploadId(),header,packetQueue,stateObject.getTotalSegments(), stateObject.currentSegments);
+								try{
+									segmenter.sendSegments(stateObject.getContentId(),stateObject.getUploadId(),header,packetQueue,stateObject.getTotalSegments(), stateObject.currentSegments);
+								}catch(Exception e){
+									//e.printStackTrace();
+									System.out.println("Exception in DataUploader");
+								}
 								tcpUploadData.add(tcpUploadData.size(),request);
 								
 							}

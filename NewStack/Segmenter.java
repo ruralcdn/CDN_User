@@ -64,10 +64,12 @@ public class Segmenter extends Thread{
 		for( ;j < (totSeg)&& segmentQueue.remainingCapacity() > 0;j++)
 		{
 			byte[] segment = store.read(readName, j*size, size);
-			Packet packet = new Packet(route,destination,PacketType.Data,sendName,
-					segment,j*size,false);
+			try{Packet packet = new Packet(route,destination,PacketType.Data,sendName,segment,j*size,false);
 			if(segmentQueue != null)
 					segmentQueue.offer(packet);
+			}catch(Exception e){
+				System.out.println("Excepton in Segmenter");
+			}
 		}
 		stateObj.currentSegments = j;		
 		mpUp.put(sendName, stateObj);
