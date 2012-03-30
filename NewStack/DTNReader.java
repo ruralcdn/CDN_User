@@ -83,6 +83,7 @@ public class DTNReader extends Thread {
 							//JFrame parent = new JFrame();
 
 						    //JOptionPane.showMessageDialog(parent, "Safely remove the drive");
+							
 						} 
 		                catch (IOException e) 
 		                {

@@ -3,6 +3,7 @@ package newNetwork;
 import java.io.*;
 import java.net.InetAddress;
 import java.util.concurrent.BlockingQueue;
+//import NewStack.LinkDetector;
 
 
 import NewStack.Packet;
@@ -50,7 +51,9 @@ public class USBConnection implements Connection{
 			out = new AppendableObjectOutputStream (new FileOutputStream (filePath, true));
 		out.writeObject(packet);
 		long filesize = file.length()/1024;
+		//int check =LinkDetector.
 		System.err.println("File Size Is: "+filesize+"KB");
+		
         out.flush ();
 		}
 		catch(Exception e){

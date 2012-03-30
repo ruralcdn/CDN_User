@@ -272,12 +272,10 @@ public class LinkDetector extends Thread{
 		String[] connectionInfo = destination.split(":");
 		dtnDestinationIds.remove(destination);
 		scheduler.removeDTNConnection(connectionInfo[0]);
-		
+		System.out.println("Inside NewStack.LinkDetector: Safely remove drive:LinkDetector:removeDestination()");		
 		JFrame parent = new JFrame();
-
-	    JOptionPane.showMessageDialog(parent, "Now Safely remove drive");
-	    
-		System.out.println("Inside NewStack.LinkDetector: Safely remove drive:LinkDetector:removeDestination()");
+	    JOptionPane.showMessageDialog(parent, "Now Safely remove drive");   
+	
 		//JOptionPane.showMessageDialog(null,"Safely remove drive");
 	}
 	
@@ -286,10 +284,11 @@ public class LinkDetector extends Thread{
 		String[] connectionInfo = destination.split(":");
 		destinationConnectionIds.remove(destination);
 		scheduler.removeConnection(connectionInfo[0]);
-		//System.out.println("Safely remove drive:LinkDetector:removeDestination()");
+		System.out.println("Safely remove drive:LinkDetector:removeDestination()");
 		//JOptionPane.showMessageDialog(null,"Safely remove drive");
 	}
 	public String findUSB(int seg){
+		int spaceReq = 0;
 		String dtnDir = null ;
 		for (int i = 0; i < letters.length; ++i)
         {
@@ -315,8 +314,8 @@ public class LinkDetector extends Thread{
 								dtnDir = letters[i] + ":DTNRouter\\";
 								long spaceAvail = FileSystemUtils.freeSpaceKb(dtnDir);
 								int dtnSize = Integer.parseInt(AppConfig.getProperty("NetworkStack.dtnSegmentSize"));
-								System.out.println("Inside LinkDetector: DTN Size is "+ dtnSize);
-								int spaceReq = 2*(dtnSize/1024)* seg ;
+								System.out.println("Inside LinkDetector: DTN Size is "+ dtnSize+"Segsize"+seg);
+								spaceReq = 2*(dtnSize/1024)* seg ;
 								System.out.println("Inside NewStack.LinkDetector: Available space is: "+spaceAvail+" space needed is: "+spaceReq);
 								if(spaceAvail < spaceReq){
 									return null ;
@@ -370,7 +369,7 @@ public class LinkDetector extends Thread{
 	{
 
 		boolean DTNlink = false;
-
+		
 		while(execute)
 		{
 

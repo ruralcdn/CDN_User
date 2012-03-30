@@ -204,6 +204,7 @@ public class DataUploader extends Thread{
 										}
 										else{
 											System.out.println("Inside NewStack.Datauploader: There are no pending packets for the uploading content: "+contentName);
+											System.out.println("Please Insert Your Pendrive");
 										}
 									}
 								} catch (RemoteException e) {
