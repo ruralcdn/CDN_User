@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import prototype.custodian.ICustodian;
 import prototype.dbserver.IDBServer;
 import newNetwork.Connection;
@@ -205,6 +209,8 @@ public class DataUploader extends Thread{
 										else{
 											System.out.println("Inside NewStack.Datauploader: There are no pending packets for the uploading content: "+contentName);
 											System.out.println("Please Insert Your Pendrive");
+											JFrame parent = new JFrame();
+										    JOptionPane.showMessageDialog(parent, "Please Insert Your PenDrive");
 										}
 									}
 								} catch (RemoteException e) {
