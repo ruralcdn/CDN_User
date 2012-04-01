@@ -42,15 +42,17 @@ public class USBConnection implements Connection{
 		System.out.println("Inside newNetwork.USBConnection: Method writePacket");
 		String fileName = packet.getName();
 		String filePath = dtnStore+fileName ;
-		ObjectOutputStream out = null;
+		//ObjectOutputStream out = null;
+		
 		File file = new File(filePath);
-		try{
+		
+		/*try{
 		if(!file.exists())
 			out =  new ObjectOutputStream(new FileOutputStream (filePath));
 		else
 			out = new AppendableObjectOutputStream (new FileOutputStream (filePath, true));
 		out.writeObject(packet);
-		long filesize = file.length()/1024;
+		long filesize = (file.length()/(1024));
 		//int check =LinkDetector.
 		System.err.println("File Size Is: "+filesize+"KB");
 		
@@ -58,15 +60,40 @@ public class USBConnection implements Connection{
 		}
 		catch(Exception e){
 			e.printStackTrace();
-		}
+		}*/
+		/*Code by gauravluthra06@gmail.com*/
+		 
+		 	FileOutputStream fout = null;
+		try{
+			if(!file.exists())
+				fout = new FileOutputStream (filePath);
+			else
+				fout = new FileOutputStream (filePath, true);
+			fout.write(packet.getBytePacket());
+	        fout.flush ();
+	        //System.err.println("remove your usb drive first");
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		
 		finally{
+            try{
+                if (fout != null) fout.close ();
+               // System.err.println("remove your usb drive second");
+            }catch (Exception e){
+                e.printStackTrace ();
+            }
+        }
+		/*finally{
             try{
                 if (out != null) out.close ();
             }catch (Exception e){
                 e.printStackTrace ();
             }
-        }
+        }*/
 		//writeQueue.offer(packet);
+		//System.err.println("remove your usb drive third");
 	}
 
 	public void writePacketNewMethod(Packet packet)

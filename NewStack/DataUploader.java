@@ -61,7 +61,7 @@ public class DataUploader extends Thread{
 				BlockingQueue<Packet> packetQueue = emptyQueue.take(); 
 				Set<String> destinationSet = connectionPool.keySet(); 
 				if(pickTCPData)
-				{
+				{	
 					pickTCPData = false;
 					List<String> tcpUploadData = stateManager.getTCPUploadRequests();
 					int size = tcpUploadData.size();

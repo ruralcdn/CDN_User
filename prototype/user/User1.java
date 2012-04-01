@@ -339,11 +339,18 @@ public class User1 extends UnicastRemoteObject implements IUser {
 	@SuppressWarnings("deprecation")
 	public String upload(String data,Connection.Type type,int id,String serviceInstance, String user) throws RemoteException
 	{
+		/*
+		 * data name = filename
+		 * connection type = usb/tcp
+		 * id = 1/2/3/...
+		 * serviceInstance = youtube.com
+		 * user = usrename like amit/quamar
+		*/
 		System.out.println("Inside prototype.user.User1: : upload");
 		String contentName = null;
 		String myContentName = user;
 		String fileType ="";
-		//System.out.println("Store value:"+store);//to be commented
+		System.out.println("Store value:"+store);//to be commented
 		if(store.contains(data))
 		{
 			DynamicIP dynamicIP = DynamicIP.getIP();
@@ -715,7 +722,12 @@ public class User1 extends UnicastRemoteObject implements IUser {
 	}
 
 	public static void main(String[] args) throws Exception{
-
+		/*
+		 * user.cfg contain all information regarding a user
+		 * like userId,Store,dbStore
+		 * 
+		 * 
+		*/
 		File configFile = new File("config/User.cfg");
 		FileInputStream fis;
 		fis = new FileInputStream(configFile);
@@ -724,23 +736,41 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		fis.close();
 		autoSync = true ;
 		System.out.println("Inside prototype.user.User1: Value of auto in User1's main: "+autoSync);
+		/*
+		 * username = user1/user2/...
+		 * store is the location of files from where files suppose to be uploaded
+		 * dbstore is the location where dbSync log to be store to synchronize the data among userdeamon,custodian & dataServer
+		*/
 		String username = AppConfig.getProperty("User.Id");
 		DataStore store = new DataStore(AppConfig.getProperty("User.Directory.path"));
 		DataStore dbStore = new DataStore(AppConfig.getProperty("User.DataLog.Directory.path"));
 		StateManager stateMgr = new  StateManager("status");
+		/*
+		 * appSatatemanger looking for the status.cfg file in the store directory
+		*/
 		ApplicationStateManager appStateMgr =  new ApplicationStateManager(store.getFile("status.cfg"));
+		/*
+		 * usermaximum downloads allow = 40
+		*/
 		BlockingQueue<String> downloadList = new ArrayBlockingQueue<String>(Integer.parseInt(AppConfig.getProperty("User.MaximumDownloads")));
 		List<String> readingList = new ArrayList<String>();
 		//NewStack netStack = new NewStack(username,stateMgr,store,usbStore,downloadList,2080,portList);
 		DataStore usbStore = null;
+		/*
+		 * usbstore is just a path there is no use of this 
+		*/
 		if(AppConfig.getProperty("Routing.allowDTN").equals("1"))
 		{
 			usbStore = new DataStore(AppConfig.getProperty("User.USBPath"));
 		}
-						
+		
+		/*
+		 * User.NetworkStack.Port = 2082
+		*/
 		int port = Integer.parseInt(AppConfig.getProperty("User.NetworkStack.Port"));
-		List<Integer> portList = new ArrayList<Integer>(20);							
-		for(int i = 0;i < 20;i++)
+		//List<Integer> portList = new ArrayList<Integer>(20);
+		List<Integer> portList = new ArrayList<Integer>(10);
+		for(int i = 0;i < 10;i++) //i<20
 		{
 			portList.add(port);
 			port++;

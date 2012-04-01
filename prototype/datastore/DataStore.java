@@ -17,6 +17,7 @@ public class DataStore{
 	public boolean contains(String dataname)
 	{
 		File file = new File(dirPath+dataname);
+		System.out.println("vale Inside "+file);
 		return file.exists();
 	}
 	public File getFile(String dataname)

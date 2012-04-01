@@ -3,6 +3,9 @@ package prototype.user;
 import java.rmi.RemoteException;
 import java.util.*;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import DBSync.RSyncClient;
 import PubSubModule.Notification;
 import StateManagement.ApplicationStateManager;
@@ -35,7 +38,10 @@ public class AppFetcher  implements IAppFetcher {
 			{
 				String contentId = notif.getContent();
 				String content = contentId.substring(0, contentId.lastIndexOf('.'));
-				System.out.println("Inside AppFetcher contentId: "+content);
+				System.out.println("Inside AppFetcher Your File is Successfully uploaded with contentId: "+content);
+				JFrame parent = new JFrame();
+
+			    JOptionPane.showMessageDialog(parent, "File Successfully uploaed with contentID"+content);
 				
 				AppStateManager.addUploadAcks(contentId);
 				if(contentKeyValueMap.containsKey(content)){

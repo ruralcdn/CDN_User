@@ -315,7 +315,8 @@ public class LinkDetector extends Thread{
 								long spaceAvail = FileSystemUtils.freeSpaceKb(dtnDir);
 								int dtnSize = Integer.parseInt(AppConfig.getProperty("NetworkStack.dtnSegmentSize"));
 								System.out.println("Inside LinkDetector: DTN Size is "+ dtnSize+"Segsize"+seg);
-								spaceReq = 2*(dtnSize/1024)* seg ;
+								//spaceReq = 2*(dtnSize/1024)* seg ;
+								spaceReq = (dtnSize/1024)* seg ;
 								System.out.println("Inside NewStack.LinkDetector: Available space is: "+spaceAvail+" space needed is: "+spaceReq);
 								if(spaceAvail < spaceReq){
 									return null ;

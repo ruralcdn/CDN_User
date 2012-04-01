@@ -24,6 +24,7 @@ public class DynamicIP extends Thread {
     public static synchronized DynamicIP getIP(){
     	if(myIP == null)
     		myIP = new DynamicIP();
+    	System.out.println("myIp"+myIP);
     	return myIP;
     }
     
@@ -132,7 +133,7 @@ public class DynamicIP extends Thread {
 			//System.out.println("FINAL VALUES DSL"+" "+linkDSL);
 			int i = linkPPP.size();
 			if(i!=0){				
-				//System.out.println("linkPPP size is"+" "+linkPPP.size());
+				System.out.println("linkPPP"+" "+linkPPP.get(i-1));
 				return linkPPP.get(i-1)+",y";
 				//return linkPPP.get(0)+",y";
 			}				
@@ -144,7 +145,8 @@ public class DynamicIP extends Thread {
 		}	
 		catch (SocketException e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.err.println("exception in ");
 		}
 		
     	return "127.0.0.1,n";
