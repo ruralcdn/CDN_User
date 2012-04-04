@@ -61,8 +61,18 @@ public class NewStack
 		
 	}
 	
-	public NewStack(String localId,StateManager manager,DataStore dStore,DataStore usbStore,DataStore  dst,BlockingQueue<String> downloads,int serverPort,List<Integer> connectionPorts,List<String> readList)
+	public NewStack(String localId,StateManager manager,DataStore dStore,DataStore usbStore,DataStore dst,BlockingQueue<String> downloads,int serverPort,List<Integer> connectionPorts,List<String> readList)
 	{
+		/*
+		 * localId is is the userId like user1/user2
+		 * manager is the object of state manager
+		 * dStore is the location of directory from where all files suppose to be 
+		 * uploaded this entry can be modified by changing entry in file user.config 
+		 * usbStore is the path of usbStore location
+		 * dst is the location where we have to put dbsync files
+		 * Serverport value 2080
+		 * connectionport is the of port [2082 2083 . . . . . 2102] 
+		*/
 		System.out.println("Inside NewStack.NewStack: Method NewStack");
 		stackId = localId;
 		stateManager = manager;

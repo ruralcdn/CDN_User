@@ -16,6 +16,9 @@ public class SegmentationReassembly{
 	private int logSize ;
 	Reassembler reassembler;
 	Segmenter segmenter;
+	public long globalsegment ;
+	public long globaldtnsegment ;
+	public long segment;
 	public static final String metadataSuffix = new String(".metadata");
 	
 	public SegmentationReassembly(StateManager manager,DataStore st,DataStore dst,Scheduler sched,int segmentsize,int dtnsize,int logSegmentSize, BlockingQueue<String> downloads)
@@ -31,7 +34,9 @@ public class SegmentationReassembly{
 		segmenter = new Segmenter(store,dbStore,segmentSize,dtnSize,logSize,scheduler.getDataFullQueues());
 		System.out.println("Inside NewStack.SegmentationReassembly: Method SegmentationReassembly");
 	}
-
+	public SegmentationReassembly() {
+		// TODO Auto-generated constructor stub
+	}
 	public long countSegments(String dataname)
 	{
 		System.out.println("Inside NewStack.SegmentationReassembly: Method countSegments");
@@ -44,10 +49,14 @@ public class SegmentationReassembly{
 			
 		}	
 		long smallchunk = (store.length(dataname)%size);
-		if(smallchunk == 0)
-			return (store.length(dataname)/size);
-		else
-			return (((store.length(dataname) - smallchunk)/size) + 1);
+		if(smallchunk == 0){
+			globalsegment = (store.length(dataname)/size);
+			return globalsegment;
+		}
+		else{
+			globalsegment = (((store.length(dataname) - smallchunk)/size) + 1);
+			return globalsegment;
+		}		
 			
 	}
 	
@@ -55,12 +64,16 @@ public class SegmentationReassembly{
 	{
 		System.out.println("Inside NewStack.SegmentationReassembly: Method countDtnSegments");
 		long smallchunk = (store.length(dataname)%dtnSize);
-		if(smallchunk == 0)
-			return (store.length(dataname)/dtnSize);
-		else
-			return (((store.length(dataname) - smallchunk)/dtnSize) + 1);
+		if(smallchunk == 0){
+			globaldtnsegment = (store.length(dataname)/dtnSize);
+			System.err.println("globaldtnsegment"+globaldtnsegment);
+			return globaldtnsegment;
+		}	
+		else{
+			globaldtnsegment = (((store.length(dataname) - smallchunk)/dtnSize) + 1);
+			return globaldtnsegment;
+		}
 	}
-
 	public void close()
 	{
 		reassembler.close();

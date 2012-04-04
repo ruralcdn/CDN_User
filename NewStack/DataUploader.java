@@ -1,5 +1,9 @@
 package NewStack;
 
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -11,8 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+//import javax.swing.JFrame;
+//import javax.swing.JOptionPane;
 
 import prototype.custodian.ICustodian;
 import prototype.dbserver.IDBServer;
@@ -35,7 +39,7 @@ public class DataUploader extends Thread{
 	Map<String, ContentState> mpContentState ;
 	Map<String, ContentState> mpDownState ;
 	Map<String,List<Integer>> pendingContent ;
-	
+
 	public DataUploader(Segmenter seg,Map<String,List<Connection>> cp,LinkDetector detector,StateManager manager,BlockingQueue<BlockingQueue<Packet>> eQ,PolicyModule policy)
 	{
 		segmenter = seg;
@@ -50,7 +54,7 @@ public class DataUploader extends Thread{
 		mpDownState = new HashMap<String, ContentState>();	
 		pendingContent = new HashMap<String, List<Integer>>();
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void run()
 	{
@@ -71,7 +75,7 @@ public class DataUploader extends Thread{
 						emptyQueue.put(packetQueue); 
 						continue;
 					}
-					
+
 					count++;  
 					String request = tcpUploadData.remove(0);  
 					ContentState stateObject = stateManager.getStateObject(request, ContentState.Type.tcpUpload);
@@ -98,15 +102,15 @@ public class DataUploader extends Thread{
 						try{
 							destination = stateObject.getPreferredRoute().get(0);
 						}catch(NullPointerException ex){
-						ex.printStackTrace();
+							ex.printStackTrace();
 						}
 						conInfo = destination.split(":"); 
 						ldetector.addDestination(destination);
 						System.out.println("Inside NewStack.Datauploader: Value of Count in DataUploader::run()= "+count) ;
 						tcpUploadData.add(tcpUploadData.size(),request);//Now added
-						
+
 					}
-					
+
 					if(count > size)
 						emptyQueue.put(packetQueue);
 					else
@@ -139,7 +143,7 @@ public class DataUploader extends Thread{
 									System.out.println("Exception in DataUploader");
 								}
 								tcpUploadData.add(tcpUploadData.size(),request);
-								
+
 							}
 							else
 							{
@@ -159,7 +163,7 @@ public class DataUploader extends Thread{
 								{
 									try
 									{
-									
+
 										registry = LocateRegistry.getRegistry(host);
 										if(custOrdb)
 											stub = (ICustodian) registry.lookup("custodian");
@@ -174,9 +178,9 @@ public class DataUploader extends Thread{
 								}
 								System.out.println("Inside NewStack.DataUploader: Cache Found.");	
 								try {
-									
+
 									if(pendingContent.containsKey(contentName)){
-										
+
 										pendingPackets = pendingContent.get(contentName);
 										System.out.println("Inside NewStack.Datauploader: Number of pending packets is: "+pendingPackets.size());
 										String finalDestination = stateObject.getPreferredRoute().get(0).split(":")[0];
@@ -187,7 +191,7 @@ public class DataUploader extends Thread{
 										continue;
 									}
 									else{
-										
+
 										if(custOrdb){
 											pendingPackets = stub.getUploadAcks(contentName,stateObject.getTotalSegments());
 											Thread.sleep(10000);
@@ -208,9 +212,30 @@ public class DataUploader extends Thread{
 										}
 										else{
 											System.out.println("Inside NewStack.Datauploader: There are no pending packets for the uploading content: "+contentName);
-											System.out.println("Please Insert Your Pendrive");
-											JFrame parent = new JFrame();
-										    JOptionPane.showMessageDialog(parent, "Please Insert Your PenDrive");
+											System.out.println("Please Insert Your USBdrive");
+
+											//code for Plugin usb drive
+
+											Toolkit toolkit = Toolkit.getDefaultToolkit();
+											Image image = toolkit.getImage("E:/logo_usb.jpg");
+
+											TrayIcon trayIcon = new TrayIcon(image, "trayicon");
+
+											SystemTray tray = SystemTray.getSystemTray();
+
+											try
+											{
+												tray.add(trayIcon);
+											}
+											catch (Exception e)
+											{
+												System.out.println("TrayIcon could not be added.");												
+											}
+
+											trayIcon.displayMessage("Insert USB Drive", "Please Insert your usb Drive", TrayIcon.MessageType.INFO);
+
+											//JFrame parent = new JFrame();
+											//JOptionPane.showMessageDialog(parent, "Please Insert Your PenDrive");
 										}
 									}
 								} catch (RemoteException e) {
@@ -229,7 +254,7 @@ public class DataUploader extends Thread{
 									System.out.println("Inside NewStack.Datauploader: Execute = " + execute);	
 									emptyQueue.put(packetQueue);
 									suspend();
-																	
+
 								}
 								else{
 									mpContentState = StateManager.getUpMap();
@@ -295,7 +320,7 @@ public class DataUploader extends Thread{
 						}
 						else{
 							System.out.println("Inside NewStack.Datauploader: Some Upload request for either TCP or USB");
-			
+
 							stateManager.setDTNRequestList(dtnData);
 							emptyQueue.put(packetQueue);
 							System.out.println("Inside NewStack.DataUploader: Block3");
@@ -315,7 +340,7 @@ public class DataUploader extends Thread{
 	{
 		return execute;
 	}
-	
+
 	public void setExecute()
 	{
 		execute = true ;

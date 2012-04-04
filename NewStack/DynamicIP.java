@@ -133,7 +133,7 @@ public class DynamicIP extends Thread {
 			//System.out.println("FINAL VALUES DSL"+" "+linkDSL);
 			int i = linkPPP.size();
 			if(i!=0){				
-				System.out.println("linkPPP"+" "+linkPPP.get(i-1));
+				//System.out.println("linkPPP"+" "+linkPPP.get(i-1));
 				return linkPPP.get(i-1)+",y";
 				//return linkPPP.get(0)+",y";
 			}				

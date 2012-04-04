@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import javax.swing.*;
+//import javax.swing.*;
 
 
 import org.apache.commons.io.FileSystemUtils;
@@ -272,9 +272,9 @@ public class LinkDetector extends Thread{
 		String[] connectionInfo = destination.split(":");
 		dtnDestinationIds.remove(destination);
 		scheduler.removeDTNConnection(connectionInfo[0]);
-		System.out.println("Inside NewStack.LinkDetector: Safely remove drive:LinkDetector:removeDestination()");		
-		JFrame parent = new JFrame();
-	    JOptionPane.showMessageDialog(parent, "Now Safely remove drive");   
+		//System.out.println("Inside NewStack.LinkDetector: Safely remove drive:LinkDetector:removeDestination()");		
+		//JFrame parent = new JFrame();
+	    ///JOptionPane.showMessageDialog(parent, "Now Safely remove drive");   
 	
 		//JOptionPane.showMessageDialog(null,"Safely remove drive");
 	}

@@ -1,5 +1,9 @@
 package NewStack;
 
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -68,7 +72,25 @@ public class SendingScheduler extends Thread{
 					sendPacket(packet);
 					queue.take();
 				}
+				System.out.println("Safely Remove Usb Drive");
 				
+				Toolkit toolkit = Toolkit.getDefaultToolkit();
+				Image image = toolkit.getImage("E:/logo_usb.jpg");
+
+				TrayIcon trayIcon = new TrayIcon(image, "trayicon");
+
+				SystemTray tray = SystemTray.getSystemTray();
+
+				try
+				{
+					tray.add(trayIcon);
+				}
+				catch (Exception e)
+				{
+					System.out.println("TrayIcon could not be added.");												
+				}
+
+				trayIcon.displayMessage("Safely Remove USB Drive", "Safely Remove your usb Drive", TrayIcon.MessageType.INFO);
 				
 				emptyQueues.put(queue);
 			}
@@ -84,7 +106,7 @@ public class SendingScheduler extends Thread{
 		if(packet != null)
 		{
 			String destination = packet.getDestination();
-			//int segNo = packet.getSequenceNumber();
+			int segNo = packet.getSequenceNumber();
 			System.out.println("Inside NewStack.SendingScheduler: destination: "+destination);
 			Connection.Type type = policyModule.getConnectionType(packet.getDestination());
 			Queue<Connection> connections = senderConnectionPool.get(destination);
@@ -94,22 +116,24 @@ public class SendingScheduler extends Thread{
 				boolean done = false;
 				int count = 0;
 				Connection con;
+				
 				while(!done && count < size)
 				{
 					count++;
+					
 					con = connections.poll();
 					if(con.getType() != type)
 					{
 						connections.offer(con);
 						continue;
-					}
+					}					
 
 					if(!(type == Connection.Type.USB))
 					{
 						packet.removeDTNHeader();
 						try
 						{
-							//System.out.println("Sending packets for "+packet.getName()+" with seqNo: "+segNo);
+							System.out.println("Sending packets for "+packet.getName()+" with seqNo: "+segNo);
 							con.writePacket(packet);
 						}
 						catch(IOException e)
@@ -139,17 +163,19 @@ public class SendingScheduler extends Thread{
 					}
 					else
 					{
-						System.out.println("Inside NewStack.SendingScheduler: Sending DTN Packet");
+						System.out.println("Inside NewStack.SendingScheduler: Write Packet");
 						try
 						{
-							con.writePacket(packet);
+							con.writePacket(packet);							
 						}catch(IOException e)
 						{
 							connections.offer(con);
 							continue;
 						}
 						done = true;
+						
 						connections.offer(con);
+						
 					}
 				}
 				

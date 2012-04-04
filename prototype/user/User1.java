@@ -9,6 +9,10 @@ import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -61,6 +65,13 @@ public class User1 extends UnicastRemoteObject implements IUser {
 	RSyncThumb rthumb ;
 	public static boolean autoSync ;
 	List<String> readingList ;
+	private int segments;
+	
+	java.sql.Connection con ;
+	Statement stat ;
+	PreparedStatement prep;
+	
+	//private int num;
 	public User1(String userid,DataStore dst ,DataStore st, ApplicationStateManager appStateMgr, StateManager stateMgr, NewStack netStack,List<String> readList) throws FileNotFoundException, IOException ,RemoteException
 	{
 		store = st;
@@ -76,28 +87,27 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		//rthumb = new RSyncThumb(userId,stack,stateManager);
 		//rthumb.start();
 	}
-
 	public String login(String username, String password) throws IOException, NotBoundException,RemoteException
 	{
-		
+
 		System.out.println("Inside User1 login() method");
 		autoSync = false;
 		System.out.println("Value of auto in User1's login: "+autoSync);
 		Registry registry = null ;
 		ICustodian stub = null;
-		
+
 		// Code to retrieve dynamic IP of GPRS interface
 		String controlIP = "";
 		DynamicIP dynamicIP = DynamicIP.getIP();
 		String localIP = dynamicIP.detectPPP();
 		if(!localIP.equals(controlIP))
 		{
-    			controlIP = localIP ;
-    			String[] splitInfo = controlIP.split(",");
-    			controlIP = splitInfo[0];
+			controlIP = localIP ;
+			String[] splitInfo = controlIP.split(",");
+			controlIP = splitInfo[0];
 		}
-		
-		
+
+
 		ListNets listNets = new ListNets();
 		try {
 			if(listNets.getPPP().size()!=0)
@@ -132,9 +142,9 @@ public class User1 extends UnicastRemoteObject implements IUser {
 				}
 			}
 		}
-		
+
 		System.out.println("Custodian Service Found.");
-		
+
 		try
 		{
 			System.out.println("Inside prototype.user.User1: Calling authenticate in USER1.java In LogIn Method");
@@ -161,7 +171,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		return userId ;
 	}
 
-	
+
 	public boolean registration(Map<String, String> userInfo) throws RemoteException{
 		boolean regSuccess = false ;
 		System.out.println("Inside prototype.user.User1: Here In User's registration() method");
@@ -183,7 +193,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		{
 			try
 			{
-				
+
 				stub = (ICustodian) registry.lookup(AppConfig.getProperty("User.Custodian.Service") );
 				System.out.println("Inside prototype.user.User1: Value of stub returned "+stub);
 				bound = true;
@@ -201,15 +211,15 @@ public class User1 extends UnicastRemoteObject implements IUser {
 				}
 			}
 		}
-		
+
 		System.out.println("Custodian Service Found.");
-		
+
 		try
 		{
 			System.out.println("Inside prototype.user.User1: Calling registration in USER1.java In LogIn Method");
 			//String userId = AppConfig.getProperty("User.Id");
 			regSuccess = stub.new_registration(userInfo);
-	
+
 		}
 		catch(Exception e){
 			System.out.println("Inside prototype.user.User1: Remote Exception happened");
@@ -217,7 +227,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		}
 		return regSuccess;
 	}
-	
+
 	public boolean updateLog(String contentName, List<String> strList) throws RemoteException{
 		boolean ins = false ;
 		try {
@@ -228,9 +238,9 @@ public class User1 extends UnicastRemoteObject implements IUser {
 			e.printStackTrace();
 		}
 		return ins;
-			
+
 	}
-	
+
 	public boolean updateLog(List<String> str) throws RemoteException{
 		boolean ins = false ;
 		try {
@@ -240,9 +250,9 @@ public class User1 extends UnicastRemoteObject implements IUser {
 			e.printStackTrace();
 		}
 		return ins;
-			
+
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public boolean delete(String contentId,String userName) throws RemoteException{
 		boolean flag = false ;
@@ -257,7 +267,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 					custodian = AppConfig.getProperty("User.Custodian.IP");
 				else
 					custodian =AppConfig.getProperty("User.Custodian.IP");
-				
+
 				try {
 					registry = LocateRegistry.getRegistry(custodian);
 					ICustodian stub = (ICustodian) registry.lookup(AppConfig.getProperty("User.Custodian.Service") );
@@ -278,7 +288,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 			e.printStackTrace();
 		}
 		return flag;
-		
+
 	}
 	public List<String> getUploadList() throws RemoteException 
 	{
@@ -286,7 +296,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		uploadAckList = appStateManager.getUploadAcks(); 
 		return uploadAckList;
 	}
-	
+
 	public List<String> getDownloadList(int AppId) throws RemoteException
 	{
 		List<String> AppIdDownloads = new ArrayList<String>();
@@ -308,7 +318,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 			return AppIdDownloads;
 		}
 	}
-	
+
 	public List<Integer> getUploadAcks (String contentName, int size) throws RemoteException{
 		List<Integer> missingPackets = new ArrayList<Integer>();
 		Map<String, ContentState> mpContent = StateManager.getDownMap(); 
@@ -321,7 +331,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 				}
 			}
 		}
-		
+
 		if(missingPackets.size()!=0){
 			String node = "";
 			if(contentName.contains(".log")){
@@ -335,17 +345,18 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		}	
 		return missingPackets;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public String upload(String data,Connection.Type type,int id,String serviceInstance, String user) throws RemoteException
 	{
 		/*
-		 * data name = filename
+		 * data name = filename(xxxx.xxx)
 		 * connection type = usb/tcp
 		 * id = 1/2/3/...
 		 * serviceInstance = youtube.com
-		 * user = usrename like amit/quamar
-		*/
+		 * user = usrename like amit/quamar/gaurav
+		 */
+		System.err.println("data:"+data);
 		System.out.println("Inside prototype.user.User1: : upload");
 		String contentName = null;
 		String myContentName = user;
@@ -353,26 +364,17 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		System.out.println("Store value:"+store);//to be commented
 		if(store.contains(data))
 		{
-			DynamicIP dynamicIP = DynamicIP.getIP();
-			
-			//System.out.println("DynamicIP"+dynamicIP);//to be commented
-			
-			String custodian= "" ;
-			
-			String controlIP = dynamicIP.detectPPP();
-			
-			//System.out.println("controlIP"+controlIP);//to be commented
-			
-			String[] splitInfo = controlIP.split(",");
-			
-			//System.out.println("splitInfo"+controlIP);//to be commented
-			
+			DynamicIP dynamicIP = DynamicIP.getIP();			
+			String custodian= "" ;		
+			String controlIP = dynamicIP.detectPPP();			
+			String[] splitInfo = controlIP.split(",");			
+
 			if(!splitInfo[0].equals("127.0.0.1")){
 				if(splitInfo[1].equals("y"))
 					custodian = AppConfig.getProperty("User.Custodian.IP");
 				else
 					custodian =AppConfig.getProperty("User.Custodian.IP");
-				
+
 				System.out.println("Inside prototype.user.User1: Custodian value:"+custodian);//to be commented
 				try {
 					Registry registry = LocateRegistry.getRegistry(custodian);
@@ -387,21 +389,22 @@ public class User1 extends UnicastRemoteObject implements IUser {
 			if(toStartCheck.equals("start"))
 				dynamicIP.start();
 			else if(toStartCheck.equals("resume"))
-				dynamicIP.resume();
-			int segments = 0 ;
+				dynamicIP.resume();			
 			int tcpSegment = 0 ;
-			if(type != Connection.Type.USB){
+			if(type != Connection.Type.USB){				
 				segments = stack.countSegments(data);
+				System.err.println("datavalue:"+data);
 				System.out.println("Inside prototype.user.User1: checking connection type:NotUsb");
 			}
-			else{
+			else{				
 				segments = stack.countDtnSegments(data);
+				status(segments);
 				tcpSegment = stack.countSegments(data);
 				System.out.println("Inside prototype.user.User1: checking connection type:Usb");
 			}
 			bitMap = new BitSet(segments);
-			System.out.println("Segments to be uploaded: "+segments);//to be commented
-			System.out.println("TcpSegment to be uploaded: "+tcpSegment);//to be commented
+			//System.out.println("Segments to be uploaded: "+segments);//to be commented
+			//System.out.println("TcpSegment to be uploaded: "+tcpSegment);//to be commented
 			ICustodianSession session = userSession.get(user);
 			int count = 0 ;
 			do
@@ -428,7 +431,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 						}
 						System.out.println("Inside prototype.user.User1:  Content name returned inside User1 is :"+ contentName);
 					}
-							
+
 					count = contentName.indexOf('$');
 					myContentName = myContentName+"$"+contentName.substring(count+1);
 					//System.out.println("myContentName"+myContentName);//to be commented
@@ -460,11 +463,40 @@ public class User1 extends UnicastRemoteObject implements IUser {
 				appStateManager.setServiceUploadName(myContentName, contentName, fileType);
 				System.out.println("Inside prototype.user.User1: ContentName = " + contentName);
 			}
-							
+
 		} 
 		return contentName;
 	}
+	private void status(int numseg) {
+		//number of segments insert into segments table
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+			e.printStackTrace();
+
+		}
+
+		try {
+			con = DriverManager.getConnection
+					("jdbc:mysql://localhost:3306/ruralcdn","root","abc123");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
+		String table = "Segments";
+		try{
+			System.out.println("Inside Status: table 1:"+table);
+			prep = con.prepareStatement("insert into "+table+" values(?)");			
+			prep.setInt(1,numseg);			
+			prep.execute();
+			prep.close();
+
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Exception occurs at insertData ");
+		}
+
+	}
 	@SuppressWarnings("deprecation")
 	public boolean uploadImg(String imgName) throws RemoteException{
 		System.out.println("Inside User1:in uploadImg");
@@ -489,7 +521,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 				System.out.println("Inside prototype.user.User1: Error in locating service for RSyncServer");
 			}
 		}
-		
+
 		String toStartCheck = dynamicIP.startThread();
 		System.out.println("Inside prototype.user.User1: In User, value of toStartCheck: "+toStartCheck);
 		if(toStartCheck.equals("start"))
@@ -506,10 +538,10 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		ContentState stateObject = new ContentState(imgName,imgName,0,bitMap, 
 				Connection.Type.DSL.ordinal(),route,segments,0,ContentState.Type.tcpUpload,Integer.toString(1),true);
 		stateManager.setTCPUploadState(stateObject);
-		
+
 		return flag ;
 	}
-	
+
 	public String upload(String data,Connection.Type type,int id) throws RemoteException
 	{
 
@@ -533,7 +565,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 					stateManager.setTCPUploadState(stateObject);
 					String fileType = null;
 					appStateManager.setServiceUploadName(contentName, contentName,fileType);
-			
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -552,7 +584,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		}
 		return contentName;
 	}
-   
+
 	public String processDynamicContent(int id,String contentId,Connection.Type uploadType,Connection.Type downloadType,String dest) throws RemoteException
 	{
 		String uploadContentName = null;
@@ -588,14 +620,14 @@ public class User1 extends UnicastRemoteObject implements IUser {
 
 				try
 				{
-						List<String> destinations = new ArrayList<String>();
-						destinations.add(new String(remoteHost+":"+remotePort));
-						ContentState downloadStateObject = new ContentState(downloadContentName,0,bitMap,
-								downloadType.ordinal(),destinations,size,0,ContentState.Type.tcpDownload,Integer.toString(id),true);
-						if(downloadType != Connection.Type.USB)
-						{
+					List<String> destinations = new ArrayList<String>();
+					destinations.add(new String(remoteHost+":"+remotePort));
+					ContentState downloadStateObject = new ContentState(downloadContentName,0,bitMap,
+							downloadType.ordinal(),destinations,size,0,ContentState.Type.tcpDownload,Integer.toString(id),true);
+					if(downloadType != Connection.Type.USB)
+					{
 						stateManager.setTCPDownloadState(downloadStateObject);
-						}
+					}
 					else
 					{
 						stateManager.setStateObject(downloadStateObject);
@@ -626,7 +658,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 					custodian = AppConfig.getProperty("User.Custodian.IP");
 				else
 					custodian = AppConfig.getProperty("User.Custodian.IP");
-				
+
 				try {
 					Registry registry = LocateRegistry.getRegistry(custodian);
 					ICustodian stub = (ICustodian) registry.lookup(AppConfig.getProperty("User.Custodian.Service") );
@@ -658,7 +690,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 						custodian = AppConfig.getProperty("User.Custodian.IP");
 					else
 						custodian = AppConfig.getProperty("User.Custodian.IP");
-					
+
 					try {
 						Registry registry = LocateRegistry.getRegistry(custodian);
 						ICustodian stub = (ICustodian) registry.lookup(AppConfig.getProperty("User.Custodian.Service") );
@@ -696,7 +728,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 					stateManager.setStateObject(stateObject);
 					readingList.add(data);
 				}
-					
+
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -705,10 +737,10 @@ public class User1 extends UnicastRemoteObject implements IUser {
 	public int getAppId()throws RemoteException{
 		return AppId ;
 	}
-	
+
 	public void uploadStatus(String name) throws RemoteException{
 		stateManager.uploadStat(name);
-		
+
 	}
 
 	public void logout(String user) throws RemoteException
@@ -718,7 +750,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		System.out.println("Inside prototype.user.User1: Value of autoSync in Logut: "+autoSync);
 		//session.close_connection();  
 		//stack.close();
-		
+
 	}
 
 	public static void main(String[] args) throws Exception{
@@ -727,7 +759,8 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		 * like userId,Store,dbStore
 		 * 
 		 * 
-		*/
+		 */
+
 		File configFile = new File("config/User.cfg");
 		FileInputStream fis;
 		fis = new FileInputStream(configFile);
@@ -740,52 +773,52 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		 * username = user1/user2/...
 		 * store is the location of files from where files suppose to be uploaded
 		 * dbstore is the location where dbSync log to be store to synchronize the data among userdeamon,custodian & dataServer
-		*/
+		 */
 		String username = AppConfig.getProperty("User.Id");
 		DataStore store = new DataStore(AppConfig.getProperty("User.Directory.path"));
 		DataStore dbStore = new DataStore(AppConfig.getProperty("User.DataLog.Directory.path"));
 		StateManager stateMgr = new  StateManager("status");
 		/*
 		 * appSatatemanger looking for the status.cfg file in the store directory
-		*/
+		 */
 		ApplicationStateManager appStateMgr =  new ApplicationStateManager(store.getFile("status.cfg"));
 		/*
 		 * usermaximum downloads allow = 40
-		*/
+		 */
 		BlockingQueue<String> downloadList = new ArrayBlockingQueue<String>(Integer.parseInt(AppConfig.getProperty("User.MaximumDownloads")));
 		List<String> readingList = new ArrayList<String>();
 		//NewStack netStack = new NewStack(username,stateMgr,store,usbStore,downloadList,2080,portList);
 		DataStore usbStore = null;
 		/*
 		 * usbstore is just a path there is no use of this 
-		*/
+		 */
 		if(AppConfig.getProperty("Routing.allowDTN").equals("1"))
 		{
 			usbStore = new DataStore(AppConfig.getProperty("User.USBPath"));
 		}
-		
+
 		/*
 		 * User.NetworkStack.Port = 2082
-		*/
+		 */
 		int port = Integer.parseInt(AppConfig.getProperty("User.NetworkStack.Port"));
 		//List<Integer> portList = new ArrayList<Integer>(20);
-		List<Integer> portList = new ArrayList<Integer>(10);
-		for(int i = 0;i < 10;i++) //i<20
+		List<Integer> portList = new ArrayList<Integer>(20);
+		for(int i = 0;i < 20;i++) //i<20
 		{
 			portList.add(port);
 			port++;
 		}
 		NewStack netStack = new NewStack(username,stateMgr,store,usbStore,dbStore,downloadList,2080,portList,readingList);
-		
+
 		// Commented to test without dbSync
 		//RSyncClient rsyncClient = new RSyncClient(stateMgr,appStateMgr,netStack);
 		//rsyncClient.start();
-		
+
 		contentKeyValueMap = new HashMap<String,List<String>>();
 		AppFetcher fetcher = new AppFetcher(appStateMgr,stateMgr,contentKeyValueMap);
 		IAppFetcher appFetcherStub = (IAppFetcher)UnicastRemoteObject.exportObject(fetcher,0);
 		Registry appFetcherRegistry = LocateRegistry.getRegistry();
-			
+
 		boolean found = false;
 		while(!found)
 		{
@@ -796,7 +829,7 @@ public class User1 extends UnicastRemoteObject implements IUser {
 			}
 			//-Djava.rmi.server.codebase=e:\\cdncdn.jar 
 			//-Djava.security.policy=permission
-			
+
 			catch(AlreadyBoundException ex)
 			{
 				appFetcherRegistry.unbind("appfetcher");
@@ -809,30 +842,30 @@ public class User1 extends UnicastRemoteObject implements IUser {
 				Runtime.getRuntime().exec(rmiPath);
 			}
 		}		
-				
+
 		/**************Start the RMI Service named "user daemon" *****************************/
-		
+
 		ListNets listNets = new ListNets();
 		List<InetAddress> host = listNets.getPPP();
-						
+
 		if(host.size()!=0){
 			InetAddress hostIP = InetAddress.getByName(AppConfig.getProperty("User.Custodian.PublicIP"));
-			
+
 			/*//COMMENTED BY AMIT DUBEY
 			System.out.println("IP:"+hostIP.getHostAddress());
 			InetAddress thisIp =InetAddress.getLocalHost();
 			System.out.println("IPs:"+thisIp.getHostAddress());*/
-			
+
 			String hostName = hostIP.getHostAddress();
 			//System.out.println("host"+host);
 			int i = host.size();
-			
+
 			Runtime.getRuntime().exec("route add "+hostName+" "+host.get(i-1).getHostAddress());
 			//Runtime.getRuntime().exec("route add "+hostName+" "+host.get(0).getHostAddress());
 			//System.out.println("hostname is " + host.get(0).getHostAddress());
 			System.out.println("Inside User1:Value of PPP is "+host.get(i-1).getHostAddress());
 		}	
-		
+
 		User1 obj = new User1(username,dbStore,store,appStateMgr,stateMgr,netStack,readingList);
 		//System.getProperties().setProperty("java.rmi.server.hostname",AppConfig.getProperty("User.Id"));
 		boolean foundNaming = false;
@@ -858,4 +891,6 @@ public class User1 extends UnicastRemoteObject implements IUser {
 		}
 		System.err.println("Class User1: Server ready");		
 	}
+
+
 }
